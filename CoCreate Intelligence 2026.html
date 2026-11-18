@@ -1,0 +1,721 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>CoCreate Intelligence 2026</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky top bar with scrollable section tabs, one content column up to 1100px, floating quick-add button for one-handed use. */
+:root{
+  --bg:#09112a; --bg2:#0d1836; --panel:#122044; --panel2:#182a56; --line:#243865;
+  --fg:#e9eefc; --mute:#9aabd0; --accent:#3d7bff; --accent-fg:#ffffff; --accent-soft:#1a2f66;
+  --good:#34c79a; --warn:#f2b73c; --bad:#f0626f;
+  --f-head:'Space Grotesk','Inter',system-ui,sans-serif; --f-body:'Inter',system-ui,-apple-system,sans-serif; --f-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#f2f5fb; --bg2:#e8edf8; --panel:#ffffff; --panel2:#f0f4fc; --line:#d3dcee;
+  --fg:#0c1a3d; --mute:#51638c; --accent:#1f5fe0; --accent-fg:#ffffff; --accent-soft:#dfe9ff;
+  --good:#0f8a67; --warn:#a96d00; --bad:#c62e3f; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#f2f5fb; --bg2:#e8edf8; --panel:#ffffff; --panel2:#f0f4fc; --line:#d3dcee;
+  --fg:#0c1a3d; --mute:#51638c; --accent:#1f5fe0; --accent-fg:#ffffff; --accent-soft:#dfe9ff;
+  --good:#0f8a67; --warn:#a96d00; --bad:#c62e3f; color-scheme:light}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 96px;min-height:100%}
+h1,h2,h3{font-family:var(--f-head);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:1.35rem} h3{font-size:1.05rem}
+a{color:var(--accent)}
+.wrap{max-width:1100px;margin:0 auto}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line);margin:0 calc(-1*max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+.brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.brand b{font-family:var(--f-head);font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase}
+.brand span{color:var(--mute);font-size:.78rem}
+.sync{margin-left:auto;font-family:var(--f-mono);font-size:.72rem;color:var(--mute)}
+.sync.good{color:var(--good)} .sync.warn{color:var(--warn)} .sync.bad{color:var(--bad)}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-top:8px}
+nav.tabs a{flex:none;padding:10px 12px;text-decoration:none;color:var(--mute);font-weight:500;font-size:.9rem;border-bottom:2px solid transparent;min-height:44px;display:flex;align-items:center}
+nav.tabs a[aria-current="page"]{color:var(--fg);border-bottom-color:var(--accent)}
+main{padding-top:18px}
+.sub{color:var(--mute);margin:4px 0 0}
+.mut{color:var(--mute)}
+.mono{font-family:var(--f-mono)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row.sp{justify-content:space-between}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+.card.flat{background:transparent}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat b{font-family:var(--f-mono);font-size:1.7rem;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{color:var(--mute);font-size:.8rem}
+.btn{font:inherit;font-weight:600;border:1px solid var(--line);background:var(--panel2);color:var(--fg);border-radius:8px;padding:10px 14px;min-height:44px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--bad);border-color:var(--bad);background:transparent}
+.btn.big{min-height:64px;font-size:1.05rem;width:100%}
+.btn.sm{min-height:36px;padding:6px 10px;font-size:.85rem}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,nav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;min-height:56px;padding:0 20px;border-radius:28px;box-shadow:0 6px 20px rgba(0,0,0,.35)}
+.pill{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--accent-soft);color:var(--fg);white-space:nowrap}
+.pill.good{background:color-mix(in srgb,var(--good) 25%,transparent)} .pill.warn{background:color-mix(in srgb,var(--warn) 25%,transparent)} .pill.bad{background:color-mix(in srgb,var(--bad) 25%,transparent)}
+.pill.demo{background:transparent;border:1px dashed var(--warn);color:var(--warn)}
+.list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.item{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;min-width:0;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.item .main{min-width:0;flex:1}
+.item .t{font-weight:600;overflow-wrap:anywhere}
+.item .m{color:var(--mute);font-size:.82rem;overflow-wrap:anywhere}
+.score{font-family:var(--f-mono);font-size:.95rem;min-width:2.2em;text-align:right}
+.fld{display:flex;flex-direction:column;gap:4px;margin-top:10px}
+.fld label,.lbl{font-size:.8rem;color:var(--mute);font-weight:500}
+input,select,textarea{font:inherit;font-size:16px;color:var(--fg);background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-height:44px;width:100%;min-width:0}
+textarea{resize:vertical}
+input[type=checkbox]{width:20px;height:20px;min-height:0;accent-color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:99px;padding:6px 12px;min-height:40px;font-size:.88rem;color:var(--fg)!important}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:8px;margin-top:12px}
+.filters input,.filters select{min-height:44px}
+.bar{display:grid;grid-template-columns:minmax(80px,32%) 1fr 2.2em;gap:8px;align-items:center;font-size:.85rem;margin-top:6px}
+.bar .bl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .bt{height:10px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.bar .bt i{display:block;height:100%;background:var(--accent);border-radius:3px}
+.bar b{font-family:var(--f-mono);font-weight:500;text-align:right}
+.meter{height:8px;background:var(--bg2);border-radius:4px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent)}
+.lanes{display:flex;gap:10px;overflow-x:auto;padding-bottom:10px;margin-top:12px}
+.lane{flex:none;width:250px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px}
+.lane h3{font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);display:flex;justify-content:space-between}
+.lane .item{margin-top:8px;padding:10px}
+.sheet{position:fixed;inset:0;z-index:40;background:rgba(3,8,24,.72);display:flex;align-items:flex-end;justify-content:center}
+.sheet[hidden]{display:none!important}
+.sheet-body{background:var(--bg);border:1px solid var(--line);border-radius:14px 14px 0 0;width:min(720px,100%);max-height:94%;overflow-y:auto;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-16px;background:var(--bg);padding:8px 0;z-index:2}
+details{margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:4px 12px}
+summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600}
+.err{color:var(--bad);margin:8px 0 0;min-height:1em;font-size:.88rem}
+.kv{display:grid;grid-template-columns:minmax(110px,34%) 1fr;gap:4px 12px;font-size:.88rem;margin-top:10px}
+.kv dt{color:var(--mute)} .kv dd{margin:0;overflow-wrap:anywhere}
+.scroll-x{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.85rem}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mute);font-weight:500}
+.banner{border:1px solid var(--warn);background:color-mix(in srgb,var(--warn) 12%,transparent);border-radius:10px;padding:10px 12px;font-size:.88rem;margin-top:12px}
+.sec{margin-top:26px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:8px;z-index:60;font-size:.9rem;max-width:90%}
+.toast[hidden]{display:none!important}
+pre.txt{white-space:pre-wrap;font-family:var(--f-body);margin:6px 0 0;overflow-wrap:anywhere}
+.swatch{display:inline-block;width:28px;height:28px;border-radius:6px;border:1px solid var(--line);vertical-align:middle}
+@media (prefers-reduced-motion:no-preference){.sheet-body{animation:up .18s ease-out}@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<div class="wrap">
+<header class="top">
+  <div class="brand"><b>CoCreate Intelligence 2026</b><span>Global Supplier Intelligence | AI Commerce | Business Development &middot; Powered by Webburner Tech</span><span id="sync" class="sync">Starting...</span></div>
+  <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+</header>
+<main id="app"></main>
+</div>
+<button class="btn primary fab" data-act="addSup" id="fab">+ Supplier</button>
+<div class="sheet" id="sheet" hidden><div class="sheet-body" role="dialog" aria-modal="true" aria-label="Details"><div class="sheet-head"><span class="lbl" id="sheetTitle"></span><button class="btn sm" data-act="close" type="button">Close</button></div><div id="sheetc"></div></div></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+"use strict";
+/* ---------- helpers ---------- */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const pad=n=>String(n).padStart(2,'0');
+const dstr=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const todayStr=()=>dstr(new Date());
+const addDays=(s,n)=>{const [y,m,d]=s.split('-').map(Number);return dstr(new Date(y,m-1,d+n))};
+const fmtDate=s=>{if(!s)return '';const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})};
+const EVENT_DAYS=['2026-11-19','2026-11-20'];
+let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2600)}
+function setSync(msg,cls){const e=$('#sync');e.textContent=msg;e.className='sync '+(cls||'')}
+
+/* ---------- store: device storage first, shared db mirror when available ---------- */
+const KINDS=['suppliers','contacts','leads','sessions','tasks','posts','settings'];
+const DB={};
+const lsGet=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}};
+KINDS.forEach(k=>DB[k]=lsGet('cc26_'+k,[]));
+let PHOTOS=lsGet('cc26_photos',{});
+let dbh=null,dict=null,samp=null,dl=null,chain=Promise.resolve();
+function persist(k){if(!lsSet('cc26_'+k,DB[k]))setSync('Device storage unavailable: export a backup','bad')}
+function cloudWrite(k,rec){
+  if(!dbh)return;
+  chain=chain.then(()=>dbh.doc(k+'/'+rec.id).set(rec)).then(()=>setSync('Saved and synced','good')).catch(e=>setSync('Saved on this device; sync failed ('+((e&&e.code)||'error')+')','warn'));
+}
+function save(k,rec){rec.updatedAt=Date.now();const i=DB[k].findIndex(r=>r.id===rec.id);if(i<0)DB[k].push(rec);else DB[k][i]=rec;persist(k);cloudWrite(k,rec);if(!dbh)setSync('Saved on this device','');return rec}
+function remove(k,id){const r=DB[k].find(x=>x.id===id);if(r){r.deleted=true;save(k,r)}}
+const list=k=>DB[k].filter(r=>!r.deleted);
+const get=(k,id)=>DB[k].find(r=>r.id===id&&!r.deleted);
+const SET=()=>DB.settings.find(r=>r.id==='main')||{id:'main'};
+async function connect(){
+  if(!window.claude||!claude.use){setSync('Saved on this device only','warn');return}
+  try{dl=await claude.use('downloads')}catch(e){}
+  try{dict=await claude.use('dictation')}catch(e){}
+  try{samp=await claude.use('sample')}catch(e){}
+  try{dbh=await claude.use('db')}catch(e){dbh=null}
+  if(!dbh){setSync('Saved on this device only','warn');render();return}
+  try{
+    for(const k of KINDS){
+      const snap=await dbh.collection(k).get();
+      const remote=new Map();snap.docs.forEach(d=>{if(d.exists)remote.set(d.id,d.data())});
+      remote.forEach((r,id)=>{const l=DB[k].find(x=>x.id===id);if(!l||(r.updatedAt||0)>(l.updatedAt||0)){const c=JSON.parse(JSON.stringify(r));c.id=id;if(l)Object.assign(l,c);else DB[k].push(c)}});
+      DB[k].forEach(l=>{const r=remote.get(l.id);if(!r||(l.updatedAt||0)>(r.updatedAt||0))cloudWrite(k,l)});
+      persist(k);
+    }
+    setSync('Synced','good');
+  }catch(e){setSync('Saved on this device; sync unavailable','warn')}
+  render();
+}
+
+/* ---------- reference data ---------- */
+const STATUS=['New','Contacted','Qualified','Meeting booked','Proposal','Won','Lost','Nurture'];
+const QUALIFIED=['Qualified','Meeting booked','Proposal','Won'];
+const NEEDS=['Website','E-commerce','AI/automation','CRM/ERP','Analytics/BI','Cloud','Distribution','Payments/finance','Other'];
+const CHALLENGES=['Not recorded','Finding customers','Logistics/shipping','Cash flow/payments','Digital presence','Compliance/UK entry','Costs/margins','Skills/technology','Other'];
+const AIS=['Unknown','None','Exploring','Using in some areas','Embedded'];
+const OPPS=['None yet','Webburner','Nifty Money','Both','Import/export/distribution','Partnership'];
+const SUP=[
+ ['company','Company name','text'],['contact','Contact person','text'],['title','Job title','text'],['email','Email','email'],['phone','Phone','tel'],['website','Website','url'],
+ ['country','Country','text'],['booth','Booth or stand number','text'],['category','Product category','text'],['stype','Supplier type','select',['Manufacturer','OEM','ODM','Trading company','Distributor','Other']],
+ ['desc','Product description','area'],['moq','MOQ','text'],['price','Indicative unit pricing','text'],['capacity','Production capacity','text'],['exports','Export markets','text'],
+ ['ukPresence','UK market presence','select',['Unknown','Yes','No']],['euPresence','European market presence','select',['Unknown','Yes','No']],['certs','Certifications','text'],
+ ['privateLabel','Private-label availability','select',['Unknown','Yes','No']],['samples','Sample availability','select',['Unknown','Yes','No']],['shipping','Shipping arrangements','text'],
+ ['challenge','Main business challenge','select',CHALLENGES],['ai','AI adoption status','select',AIS],['techNeeds','Technology requirements','multi',NEEDS],
+ ['opp','Commercial opportunity','select',OPPS],['notes','Notes','area'],['source','Source of information','select',['Met at stand','Google Form','Business card','Introduced','Other']],
+ ['interactionDate','Date of interaction','date'],['followUp','Follow-up date','date'],['permission','Contact permission','select',['Unknown','Yes','No']],['owner','Lead owner','text'],['status','Lead status','select',STATUS]
+];
+const QUICK=['company','contact','email','phone','country','booth','category','stype','challenge','techNeeds','permission','followUp','status','notes'];
+const CON=[
+ ['name','Name','text'],['company','Company','text'],['role','Role','text'],['email','Email','email'],['phone','Phone','tel'],['linkedin','LinkedIn URL','url'],
+ ['ctype','Contact type','select',['Prospect','Supplier','Investor','Partner','Speaker','Other']],['biz','Relevant to','select',['Webburner','Nifty Money','Both','Neither']],
+ ['where','Where we met','text'],['discussed','What we discussed','area'],['interests','Their interests','text'],['pain','Their pain points','text'],
+ ['iPromised','What I promised','text'],['theyPromised','What they promised','text'],['next','Next steps','text'],['followUp','Follow-up deadline','date'],
+ ['card','Business card','select',['None','Received','Given','Exchanged']],['permission','Contact permission','select',['Unknown','Yes','No']]
+];
+const STAGES=['Discovered','Contacted','Qualified','Discovery meeting','Proposal requested','Proposal sent','Negotiation','Won','Lost','Nurture'];
+const CATS={webburner:['Website development','E-commerce','AI automation','CRM/ERP','Business intelligence','Cloud infrastructure','Digital transformation','Custom software'],
+            nifty:['Fintech partnerships','Data providers','Analytics integrations','Institutional technology','B2B distribution','Research collaboration','Strategic partnerships']};
+const BIZ={webburner:'Webburner Tech',nifty:'Nifty Money'};
+const NEED_TO_CAT={'Website':'Website development','E-commerce':'E-commerce','AI/automation':'AI automation','CRM/ERP':'CRM/ERP','Analytics/BI':'Business intelligence','Cloud':'Cloud infrastructure'};
+
+/* ---------- seeds (fixed ids, oldest timestamp so any real edit wins) ---------- */
+const SEED_SESS=[
+ ['Fireside chat: Simon Squibb and Jonathan Anguelov',5,'Both are named as 2026 CoCreate Pitch judges. Confirm the session time and stage.'],
+ ['Alibaba.com executive keynote',5,'Brief names Chris Kuo and Patrick Sostmann. Confirm who speaks and when.'],
+ ['DHL: AI in logistics',4,'Confirm session name and time.'],
+ ['AI and SME growth sessions',4,'Confirm which sessions run each day.'],
+ ['Entrepreneur Arena',3,'Confirm schedule.'],
+ ['Accio Work',4,'Alibaba.com AI sourcing and business tool. Confirm demo times.'],
+ ['Supplier innovation showcase',5,'Main supplier discovery opportunity. Confirm hall and stand area.'],
+ ['Payments and international trade sessions',4,'Relevant to Nifty Money. Confirm speakers (HSBC named in brief).'],
+ ['CoCreate Pitch Final',5,'The organiser says the London final runs 19-20 November. Confirm the final slot.']
+];
+const SEED_POSTS=[
+ ['Pre-event announcement','LinkedIn',"I'm heading to CoCreate Europe at ExCeL London on 19-20 November.\n\nI'm going with one question: how are suppliers and SMEs actually using AI in their day-to-day operations, beyond the headlines?\n\nI'll share what I learn over the two days. If you'll be there and want to compare notes, send me a message.\n\n#CoCreate #AgenticCommerce #SMEs"],
+ ['Event arrival','LinkedIn',"Day 1 at CoCreate London. First impressions: [one specific thing you saw in the first hour].\n\nToday I'm looking for [two things you want to learn]. Who should I meet?"],
+ ['Supplier discovery insights','LinkedIn',"Two days of conversations with suppliers at CoCreate. What I heard most: [top challenge from your Command Centre chart].\n\n[N] suppliers shared their view. Findings are anonymised and will go into a short report."],
+ ['AI and agentic commerce observations','LinkedIn',"Agentic commerce, in plain terms: [your own one-sentence explanation].\n\nWhat I saw at CoCreate: [observation 1]. [observation 2].\n\nWhat I'm still unsure about: [honest open question]."],
+ ['Founder conversations','LinkedIn',"I asked [first name, with permission] what they would automate first if they started again. The answer: [their answer].\n\nI keep thinking about [your reflection]."],
+ ['Behind the scenes','Instagram',"Two days, one badge, a lot of conversations. [Describe the photo]. #CoCreateLondon #ExCeL #AI"],
+ ['Event conclusion','LinkedIn',"CoCreate London in three takeaways:\n1. [takeaway]\n2. [takeaway]\n3. [takeaway]\n\nThank you to everyone who stopped to talk. Follow-ups go out this week."],
+ ['Final intelligence report','LinkedIn',"The European Supplier & AI Commerce Report 2026 is out. Based on [N] supplier conversations, anonymised.\n\nTop finding: [from the Report tab].\n\nFull report: [link]"],
+ ['Arrival caption','Instagram',"Badge on, notebook out. 48 hours at CoCreate London. #CoCreateLondon"],
+ ['Insight caption','Instagram',"The question I kept asking suppliers: what is the one task you wish a computer did for you? [Answer pattern]. #AI #Suppliers"],
+ ['Video script: arrival (20s)','Video script',"Shot 1: walking in, badge visible. Line: 'I'm at CoCreate London to find out how suppliers really use AI.'\nShot 2: venue wide. Line: 'Two days, one question.'\nEnd card: 48 Hours at CoCreate London."],
+ ['Video script: one insight (30s)','Video script',"Open on a stand (ask permission). Line: 'Here is something I did not expect: [insight].'\nCut to you: 'Why it matters for small manufacturers: [one sentence].'\nEnd: 'Full findings coming soon.'"],
+ ['Interview questions: suppliers','Interview Qs',"1. What do you make, and who buys it today?\n2. Which markets do you want to grow in next?\n3. What is the slowest part of winning a new customer?\n4. Where do you already use AI or automation?\n5. If you could fix one process this year, which one?\n6. What stops you selling in the UK or Europe?"],
+ ['Interview questions: founders and speakers','Interview Qs',"1. What did you automate too late?\n2. What do you look for in an AI-driven business?\n3. What is overhyped in agentic commerce?\n4. What would you build for SMEs?\n5. Who should I talk to next?"],
+ ['Photography shot list','Shot list',"- Badge and venue entrance\n- Main stage wide (no attendee faces unless they agree)\n- Supplier stand with permission\n- Your notebook or phone with notes\n- A handshake or conversation (ask first)\n- Speaker slide with a key stat\n- Evening of Day 1 reflection"],
+ ['Post-event newsletter','Newsletter',"Subject: What I learned at CoCreate London\n\nHi [first name],\n\nI spent two days at CoCreate Europe talking to suppliers and founders about AI and international trade. Three things stood out:\n\n1. [finding]\n2. [finding]\n3. [finding]\n\nThe full anonymised report is here: [link]. If you would like to talk through any of it, reply to this email.\n\nMihir"]
+];
+function ensureSeeds(){
+  SEED_SESS.forEach((s,i)=>{const id='seed-sess-'+i;if(!DB.sessions.find(r=>r.id===id))DB.sessions.push({id,type:'session',title:s[0],priority:s[1],notes:s[2],day:'',start:'',end:'',stage:'',access:'Check ticket',tbc:true,updatedAt:1})});
+  SEED_POSTS.forEach((p,i)=>{const id='seed-post-'+i;if(!DB.posts.find(r=>r.id===id))DB.posts.push({id,title:p[0],channel:p[1],text:p[2],status:'Draft',updatedAt:1})});
+  persist('sessions');persist('posts');
+}
+
+/* ---------- speakers (public facts only where a source was retrieved) ---------- */
+const PITCH_SRC='Organiser announcement, 8 Oct 2026 (bebeez.eu)';
+const SPK=[
+ {id:'squibb',name:'Simon Squibb',role:'Entrepreneur and angel investor',pub:['Named as a 2026 CoCreate Pitch judge.','Described in the announcement as entrepreneur, angel investor and author.'],src:PITCH_SRC,assume:['Likely open to founder and early-stage conversations (inference, not verified).'],rel:4,acc:3,val:3,
+  intro:"Hi Simon, I'm Mihir, a founder and PhD researcher building at the intersection of AI, fintech and technology. I'm here to learn how small suppliers are adopting AI.",
+  qs:["What separates founders who move fast on new technology from those who wait?","Which small-business problem do you think AI will fix first?","What advice would you give a founder running companies in two countries?"],
+  angles:['Founder perspective on AI for small businesses','Introductions to founders who need software or automation'],follow:"Hi Simon, thanks for the conversation at CoCreate. I'll share the supplier findings once published; I'd value your view when they are out. Mihir"},
+ {id:'meaden',name:'Deborah Meaden',role:'Business investor and TV personality',pub:['Named as a 2026 CoCreate Pitch judge.','Described in the announcement as a business investor and TV personality.'],src:PITCH_SRC,assume:['Likely focused on consumer and product businesses (inference, not verified).'],rel:3,acc:2,val:3,
+  intro:"Hi Deborah, I'm Mihir. I run a software and AI consultancy and a fintech business, and I'm talking to suppliers here about where technology holds them back.",
+  qs:["What do you see most often hold back otherwise good product businesses?","How much does a company's digital presence matter in your decisions?","Which supplier or manufacturing trend should founders watch?"],
+  angles:['Insight into what investors look for in product businesses'],follow:"Hi Deborah, thank you for your time at CoCreate. I'm compiling an anonymised supplier report and would be glad to send it. Mihir"},
+ {id:'ferdinand',name:'Rio Ferdinand OBE',role:'Strategic investor and former footballer',pub:['Leads the 2026 CoCreate Pitch judging panel; also judged in 2025.'],src:PITCH_SRC,assume:['Public profile suggests high demand for his time, so access is likely limited (inference).'],rel:2,acc:1,val:2,
+  intro:"Hi Rio, I'm Mihir, a founder and PhD researcher in AI and fintech. Great to see founders getting this stage.",
+  qs:["What makes you back a founder at an early stage?","What has surprised you about technology startups?","Which sectors are you watching next?"],
+  angles:['Low priority for direct commercial work; useful for brand visibility if a natural moment arises'],follow:"Hi Rio, thanks for taking a moment at CoCreate. Mihir"},
+ {id:'anguelov',name:'Jonathan Anguelov',role:'Co-founder of Aircall, founder of Offstone',pub:['Named as a 2026 CoCreate Pitch judge.','Described as co-founder of Aircall and founder of Offstone.','Listed in your brief for a fireside chat with Simon Squibb.'],src:PITCH_SRC+'; your brief',assume:['Likely interested in software scale-ups and AI-native founders (inference, not verified).'],rel:5,acc:3,val:4,
+  intro:"Hi Jonathan, I'm Mihir. I build software and AI products for growing businesses and run a fintech company. I'd like your view on what makes software businesses scale across markets.",
+  qs:["What would you automate earlier if you started Aircall today?","How do you evaluate an AI-native founder compared with a few years ago?","Where do you see the biggest gap in software for small manufacturers?"],
+  angles:['Software scaling and go-to-market advice','Introduction to founders needing technology partners'],follow:"Hi Jonathan, I enjoyed the conversation at CoCreate. I'll send the supplier AI findings when they're ready. Mihir"},
+ {id:'onaran',name:'Tijen Onaran',role:'Entrepreneur and investor (from your brief)',pub:['Listed in your brief. I could not retrieve a verified biography.'],src:'Your brief',assume:['Everything beyond the title is unverified.'],rel:3,acc:3,val:3,
+  intro:"Hi Tijen, I'm Mihir, a founder working across AI and fintech between London and India. What are you most keen to see at CoCreate?",
+  qs:["What are you hoping to learn from the supplier side?","What founder network gaps do you see in Europe?","Which topics from today should founders follow up on?"],
+  angles:['Founder networks and introductions'],follow:"Hi Tijen, thank you for the conversation. Happy to share the findings from my supplier discussions. Mihir"},
+ {id:'kuo',name:'Chris Kuo',role:'Alibaba.com (from your brief)',pub:['Listed in your brief as Alibaba.com. Role not verified.'],src:'Your brief',assume:['Role and remit unverified; check the official speaker page.'],rel:5,acc:2,val:4,
+  intro:"Hi Chris, I'm Mihir. I build software and AI integrations for SMEs and manufacturers. I'd like to understand how suppliers on the platform adopt AI tooling.",
+  qs:["Which AI tools are suppliers adopting fastest?","Where do European buyers struggle most when sourcing?","How do you see third-party software partners fitting around the platform?"],
+  angles:['Technology services for suppliers and sellers','Understanding the platform ecosystem'],follow:"Hi Chris, thanks for the discussion at CoCreate. I'd welcome a conversation about supporting suppliers with software and automation. Mihir"},
+ {id:'sostmann',name:'Patrick Sostmann',role:'Alibaba.com (from your brief)',pub:['Listed in your brief as Alibaba.com. Role not verified.'],src:'Your brief',assume:['Role and remit unverified.'],rel:5,acc:2,val:4,
+  intro:"Hi Patrick, I'm Mihir, a founder in software and fintech. I'm collecting anonymised views from suppliers on AI adoption and would value your perspective.",
+  qs:["What does a supplier need to be ready for European buyers?","Where does agentic commerce change sourcing first?","What do SMEs misunderstand about AI in trade?"],
+  angles:['Supplier readiness and digital tooling'],follow:"Hi Patrick, thank you for your time at CoCreate. I'll send the anonymised supplier findings when ready. Mihir"},
+ {id:'ovens',name:'Michelle Ovens',role:'Small Business Britain (from your brief)',pub:['Listed in your brief as Small Business Britain. Role not verified.'],src:'Your brief',assume:['Likely well connected to UK small business; unverified.'],rel:4,acc:3,val:3,
+  intro:"Hi Michelle, I'm Mihir. I help small and growing businesses with software and automation. What are UK small businesses asking for most right now?",
+  qs:["Which digital skills gap do small businesses raise most?","What helps small firms trust new AI tools?","How can founders support the small-business community here?"],
+  angles:['UK SME community and visibility for supplier findings'],follow:"Hi Michelle, thanks for talking at CoCreate. I'd be glad to share the SME-relevant findings. Mihir"},
+ {id:'google',name:'Google representative (name to confirm)',role:'Google (from your brief)',pub:['Brief says representatives from Google will speak. Name not available.'],src:'Your brief',assume:['Everything else unknown.'],rel:3,acc:3,val:2,intro:"Hi, I'm Mihir, a founder building AI and software products. Which AI use cases are small businesses asking about?",qs:["Which AI features do small firms adopt first?","What blocks adoption at SMEs?","Where do partners help most?"],angles:['Cloud and AI partner ecosystem'],follow:"Thanks for the conversation at CoCreate. Mihir"},
+ {id:'microsoft',name:'Microsoft representative (name to confirm)',role:'Microsoft (from your brief)',pub:['Brief says representatives from Microsoft will speak. Name not available.'],src:'Your brief',assume:['Everything else unknown.'],rel:3,acc:3,val:2,intro:"Hi, I'm Mihir, a founder building AI, CRM and automation software for growing businesses. What are you seeing SMEs deploy?",qs:["Which automation projects deliver value fastest?","What do partners often get wrong?","Where is demand for CRM and ERP integrations growing?"],angles:['Partner ecosystem for CRM, cloud and AI'],follow:"Thanks for the conversation at CoCreate. Mihir"},
+ {id:'dhl',name:'DHL representative (name to confirm)',role:'DHL (from your brief)',pub:['Brief lists a DHL AI logistics session. Speaker not available.'],src:'Your brief',assume:['Everything else unknown.'],rel:4,acc:3,val:3,intro:"Hi, I'm Mihir. I build software and automation for businesses. How are suppliers handling cross-border shipping data today?",qs:["Where does logistics data break down for small exporters?","Which AI use cases are live today?","What do exporters need in tools?"],angles:['Logistics and shipping workflow software'],follow:"Thanks for the conversation at CoCreate. Mihir"},
+ {id:'hsbc',name:'HSBC representative (name to confirm)',role:'HSBC (from your brief)',pub:['Brief says representatives from HSBC will speak. Name not available.'],src:'Your brief',assume:['Everything else unknown.'],rel:4,acc:3,val:3,intro:"Hi, I'm Mihir, a founder in fintech and analytics. How are trade finance and payments changing for small exporters?",qs:["Where do small exporters struggle with payments?","Which data would help financing decisions?","How do banks partner with fintechs on trade?"],angles:['Fintech and data partnerships (Nifty Money)'],follow:"Thanks for the conversation at CoCreate. Mihir"}
+];
+const spScore=s=>Math.round((s.rel*.4+s.acc*.2+s.val*.4)*20);
+
+/* ---------- opportunity engine (rules-based) ---------- */
+const clamp=n=>Math.max(0,Math.min(100,Math.round(n)));
+const validEmail=e=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e||'');
+function daysUntil(s){if(!s)return null;const a=new Date(todayStr()+'T00:00'),b=new Date(s+'T00:00');return Math.round((b-a)/864e5)}
+function assess(s){
+  const needs=s.techNeeds||[],txt=((s.notes||'')+' '+(s.desc||'')).toLowerCase(),why={webburner:[],nifty:[],partner:[],quality:[],urgency:[]};
+  let w=0;
+  const core=needs.filter(n=>NEED_TO_CAT[n]);
+  if(core.length){w+=Math.min(60,core.length*15);why.webburner.push(core.length+' relevant need(s) recorded: '+core.join(', '))}else why.webburner.push('No Webburner-relevant technology interest recorded');
+  if(['Digital presence','Skills/technology','Finding customers'].includes(s.challenge)){w+=10;why.webburner.push('Challenge ('+s.challenge+') can be addressed by software')}
+  if(['None','Exploring'].includes(s.ai)){w+=8;why.webburner.push('AI adoption is '+s.ai.toLowerCase()+': room to help')}
+  if(!s.website){w+=5;why.webburner.push('No website recorded')}
+  if(/uk|europe|eu\b/i.test(s.exports||'')||s.ukPresence==='Yes'||s.euPresence==='Yes'){w+=8;why.webburner.push('Sells or wants to sell in the UK or Europe')}
+  if(s.permission==='Yes'){w+=6;why.webburner.push('Contact permission given')}
+  if(s.permission==='No'){w=Math.min(w,20);why.webburner.push('Contact permission refused: score capped')}
+  let n=0;
+  if(needs.includes('Payments/finance')){n+=30;why.nifty.push('Interested in payments or finance')}
+  if(s.challenge==='Cash flow/payments'){n+=25;why.nifty.push('Cash flow or payments is the main challenge')}
+  if(/\b(fx|payment|financ|invest|fintech|treasury|currency)/.test(txt)){n+=20;why.nifty.push('Notes mention finance topics')}
+  if(['Nifty Money','Both','Partnership'].includes(s.opp)){n+=20;why.nifty.push('You marked a Nifty Money or partnership opportunity')}
+  if(!why.nifty.length)why.nifty.push('No finance signal. Most suppliers are not a Nifty Money fit, so this stays low.');
+  let p=0;
+  if(['Import/export/distribution','Partnership'].includes(s.opp)){p+=30;why.partner.push('You marked '+s.opp.toLowerCase())}
+  if(['Distributor','Trading company'].includes(s.stype)){p+=15;why.partner.push('Distribution-type business')}
+  if(/uk|europe|eu\b/i.test(s.exports||'')){p+=15;why.partner.push('Already exports to UK or Europe')}
+  if(s.privateLabel==='Yes'){p+=5;why.partner.push('Offers private label')}
+  if(s.samples==='Yes'){p+=5;why.partner.push('Offers samples')}
+  if(s.certs){p+=5;why.partner.push('Certifications recorded')}
+  if(s.website){p+=5;why.partner.push('Has a website')}
+  if(s.permission==='Yes'){p+=10;why.partner.push('Contact permission given')}
+  if(!why.partner.length)why.partner.push('No partnership signals recorded');
+  let q=0;const keys=['company','contact','email','phone','country','category','challenge','followUp'];
+  const have=keys.filter(k=>s[k]&&s[k]!=='Not recorded');q+=have.length*8;why.quality.push(have.length+' of '+keys.length+' key fields completed');
+  if(needs.length){q+=8;why.quality.push('Technology needs recorded')}
+  if(validEmail(s.email)){q+=8;why.quality.push('Valid email')}
+  if(s.permission==='Yes'){q+=12;why.quality.push('Contact permission given')}
+  if(QUALIFIED.includes(s.status)){q+=12;why.quality.push('Status: '+s.status)}
+  if(s.source==='Google Form')why.quality.push('Completing the form adds nothing by itself');
+  let u=0;const du=daysUntil(s.followUp);
+  if(du!==null){if(du<=0){u+=60;why.urgency.push(du<0?'Follow-up overdue':'Follow-up due today')}else if(du<=3){u+=50;why.urgency.push('Follow-up due in '+du+' day(s)')}else if(du<=7){u+=35;why.urgency.push('Follow-up within a week')}else{u+=15;why.urgency.push('Follow-up date set')}}else why.urgency.push('No follow-up date set');
+  if(QUALIFIED.includes(s.status)){u+=20;why.urgency.push('Already qualified')}
+  if(s.permission==='Yes')u+=10;
+  if(s.interactionDate&&daysUntil(s.interactionDate)>=-3){u+=10;why.urgency.push('Recent conversation')}
+  const sc={webburner:clamp(w),nifty:clamp(n),partner:clamp(p),quality:clamp(q),urgency:clamp(u)};
+  const top=Object.entries({webburner:sc.webburner,nifty:sc.nifty,partner:sc.partner}).sort((a,b)=>b[1]-a[1])[0];
+  let next;
+  if(s.permission==='No')next='Do not follow up. Contact permission was refused.';
+  else if(s.permission!=='Yes')next='Ask for permission to follow up before sending anything.';
+  else if(top[1]<25)next='Keep as a market-intelligence contact; no commercial follow-up yet.';
+  else if(top[0]==='webburner')next='Offer a 20-minute discovery call about '+(core[0]?core[0].toLowerCase():'their technology needs')+'.';
+  else if(top[0]==='nifty')next='Explore the finance angle in a short call.';
+  else next='Discuss distribution or partnership options.';
+  const qs=[];
+  if(!s.moq)qs.push('What is your typical MOQ?');if(!s.exports)qs.push('Which markets do you sell to now, and which next?');
+  if(!s.challenge||s.challenge==='Not recorded')qs.push('What is the biggest obstacle to growth this year?');
+  if(!needs.length)qs.push('Which of these would help most: website, e-commerce, automation, CRM, analytics, distribution?');
+  if(!s.website)qs.push('How do buyers find you online today?');
+  if(s.ai==='Unknown')qs.push('Do you use any AI or automation tools today?');
+  if(!qs.length)qs.push('What would a good outcome from a follow-up call look like?');
+  const first=(s.contact||'').split(' ')[0]||'there';
+  const msg=s.permission==='Yes'
+   ?`Hi ${first},\n\nGood to meet you at CoCreate London${s.booth?' (stand '+s.booth+')':''}. We talked about ${s.challenge&&s.challenge!=='Not recorded'?s.challenge.toLowerCase():'your plans for the UK and Europe'}${s.category?' in '+s.category.toLowerCase():''}.\n\n${top[1]>=25&&top[0]==='webburner'?'I run Webburner Tech, which builds software and automation for growing businesses. Would a 20-minute call next week be useful?':'Would you be open to a short call to continue the conversation?'}\n\nBest,\nMihir`
+   :`Do not send a business follow-up yet: permission is ${s.permission==='No'?'refused':'not confirmed'}. If they approached you first, a plain thank-you for the conversation is fine.`;
+  const summary=`${s.company||'This supplier'}${s.country?' ('+s.country+')':''} ${s.stype?'is a '+s.stype.toLowerCase():'is a supplier'}${s.category?' in '+s.category.toLowerCase():''}. Main challenge: ${s.challenge&&s.challenge!=='Not recorded'?s.challenge.toLowerCase():'not recorded'}. AI adoption: ${(s.ai||'unknown').toLowerCase()}. Needs: ${needs.length?needs.join(', '):'none recorded'}.`;
+  return{sc,why,next,qs,msg,summary};
+}
+
+/* ---------- csv ---------- */
+const csvCell=v=>{v=Array.isArray(v)?v.join('; '):(v==null?'':String(v));return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+const toCSV=(rows,cols)=>[cols.map(c=>csvCell(c[1])).join(',')].concat(rows.map(r=>cols.map(c=>csvCell(r[c[0]])).join(','))).join('\r\n');
+function parseCSV(t){const rows=[];let r=[],c='',q=false;for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch==='"'){if(t[i+1]==='"'){c+='"';i++}else q=false}else c+=ch}else if(ch==='"')q=true;else if(ch===','){r.push(c);c=''}else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&t[i+1]==='\n')i++;r.push(c);c='';rows.push(r);r=[]}else c+=ch}
+  if(c!==''||r.length){r.push(c);rows.push(r)}return rows.filter(x=>x.some(y=>y.trim()))}
+const norm=s=>String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
+function mapHeader(h){const n=norm(h);
+  if(n.includes('company'))return 'company';if(n.includes('contactperson')||n==='name')return 'contact';if(n.includes('email'))return 'email';
+  if(n.includes('country'))return 'country';if(n.includes('productcategory')||n==='category')return 'category';
+  if(n.includes('manufacturer')||n.includes('oem')||n.includes('tradingcompany')||n.includes('businesstype')||n.includes('suppliertype'))return 'stype';
+  if(n.includes('moq'))return 'moq';if(n.includes('exportmarket'))return 'exports';if(n.includes('challenge'))return 'challenge';
+  if(n.includes('interest')||n.includes('technologyrequirement'))return 'techNeeds';if(n.includes('permission')||n.includes('consent'))return 'permission';
+  if(n.includes('timestamp'))return 'interactionDate';if(n.includes('phone'))return 'phone';if(n.includes('website'))return 'website';return null}
+function mapNeeds(v){const t=String(v).toLowerCase(),o=[];
+  if(/\bai\b|automation/.test(t))o.push('AI/automation');if(/website/.test(t))o.push('Website');if(/e-?commerce/.test(t))o.push('E-commerce');if(/crm|erp/.test(t))o.push('CRM/ERP');if(/analytic|\bbi\b/.test(t))o.push('Analytics/BI');if(/distribution/.test(t))o.push('Distribution');return o}
+function mapChallenge(v){const t=String(v).toLowerCase();
+  if(/customer|buyer|lead|sales/.test(t))return 'Finding customers';if(/logist|ship|freight/.test(t))return 'Logistics/shipping';if(/cash|payment|financ/.test(t))return 'Cash flow/payments';
+  if(/digital|website|online|visib/.test(t))return 'Digital presence';if(/complian|uk entry|regulat|customs/.test(t))return 'Compliance/UK entry';if(/cost|margin|price/.test(t))return 'Costs/margins';if(/skill|tech|software/.test(t))return 'Skills/technology';return 'Other'}
+function mapStype(v){const t=String(v).toLowerCase();if(/oem/.test(t))return 'OEM';if(/odm/.test(t))return 'ODM';if(/distribut/.test(t))return 'Distributor';if(/trading/.test(t))return 'Trading company';if(/manufact/.test(t))return 'Manufacturer';return 'Other'}
+function importCSV(text){
+  const rows=parseCSV(text);if(rows.length<2)return{added:0,skipped:0,err:'No data rows found. Paste the header row and at least one response.'};
+  const map=rows[0].map(mapHeader);if(!map.includes('company'))return{added:0,skipped:0,err:'Could not find a company column. Check the header row.'};
+  let added=0,skipped=0;
+  rows.slice(1).forEach(r=>{
+    const s={id:uid(),source:'Google Form',status:'New',owner:'Mihir',permission:'Unknown',techNeeds:[],opp:'None yet',ai:'Unknown',interactionDate:todayStr()};
+    map.forEach((k,i)=>{const v=(r[i]||'').trim();if(!k||!v)return;
+      if(k==='techNeeds')s.techNeeds=mapNeeds(v);
+      else if(k==='challenge'){s.challenge=mapChallenge(v);s.notes=((s.notes||'')+'Challenge (form): '+v+'\n')}
+      else if(k==='stype')s.stype=mapStype(v);
+      else if(k==='permission')s.permission=/^(yes|y\b)/i.test(v)||/may contact|you may/i.test(v)?'Yes':'No';
+      else if(k==='interactionDate'){const d=new Date(v);if(!isNaN(d))s.interactionDate=dstr(d)}
+      else s[k]=v});
+    if(!s.company)return;
+    const dup=list('suppliers').find(x=>norm(x.company)===norm(s.company)&&(x.email||'').toLowerCase()===(s.email||'').toLowerCase());
+    if(dup){skipped++;return}save('suppliers',s);added++});
+  return{added,skipped}}
+
+/* ---------- files out ---------- */
+async function saveFile(name,data,isText=true){
+  if(dl){try{await dl.save({filename:name,data});toast('Saved '+name);return}catch(e){if(e&&e.code==='declined')return}}
+  if(isText)sheet('File: '+name,`<p class="mut">Downloads are not available in this view. Copy the text below into a file named ${esc(name)}.</p><textarea readonly rows="14" id="copyarea">${esc(data)}</textarea>`);
+  else toast('Download is not available in this view')
+}
+async function copyText(t){try{await navigator.clipboard.writeText(t);toast('Copied')}catch(e){sheet('Copy text',`<textarea readonly rows="10">${esc(t)}</textarea><p class="mut">Select the text and copy it.</p>`)}}
+
+/* ---------- sheet ---------- */
+function sheet(title,html){$('#sheetTitle').textContent=title;$('#sheetc').innerHTML=html;$('#sheet').hidden=false;document.body.style.overflow='hidden';$('.sheet-body').scrollTop=0}
+function closeSheet(){$('#sheet').hidden=true;$('#sheetc').innerHTML='';document.body.style.overflow='';pendingPhoto=null}
+function field(f,v){const [k,label,type,opts]=f,id='f_'+k;let inp;
+  if(type==='area')inp=`<textarea id="${id}" name="${k}" rows="3">${esc(v)}</textarea>`;
+  else if(type==='select')inp=`<select id="${id}" name="${k}">${opts.map(o=>`<option${o===v?' selected':''}>${esc(o)}</option>`).join('')}</select>`;
+  else if(type==='multi')inp=`<div class="chips">${opts.map(o=>`<label class="chip"><input type="checkbox" name="${k}" value="${esc(o)}"${(v||[]).includes(o)?' checked':''}>${esc(o)}</label>`).join('')}</div>`;
+  else inp=`<input id="${id}" name="${k}" type="${type}" value="${esc(v)}"${type==='email'?' autocapitalize="off" autocomplete="off"':''}>`;
+  return `<div class="fld"><label${type==='multi'?'':` for="${id}"`}>${label}</label>${inp}</div>`}
+function readForm(form,fields){const fd=new FormData(form),o={};fields.forEach(f=>{const k=f[0];o[k]=f[2]==='multi'?fd.getAll(k):String(fd.get(k)||'').trim()});return o}
+let pendingPhoto=null;
+function downscale(file){return new Promise(res=>{const img=new Image(),u=URL.createObjectURL(file);img.onload=()=>{const s=Math.min(1,640/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=img.width*s;c.height=img.height*s;c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.6))};img.onerror=()=>res(null);img.src=u})}
+
+/* ---------- supplier UI ---------- */
+const ui={q:'',status:'',cat:'',sort:'updated',nq:'',ntype:'',ntab:'contacts',biz:'webburner',day:EVENT_DAYS[0],gq:''};
+const pill=(t,c)=>`<span class="pill ${c||''}">${esc(t)}</span>`;
+const stCls=s=>s==='Won'?'good':s==='Lost'?'bad':QUALIFIED.includes(s)?'good':s==='New'?'':'warn';
+function supForm(rec){
+  const s=rec||{id:uid(),status:'New',owner:'Mihir',permission:'Unknown',source:'Met at stand',interactionDate:todayStr(),techNeeds:[]};
+  const q=SUP.filter(f=>QUICK.includes(f[0])),r=SUP.filter(f=>!QUICK.includes(f[0]));
+  sheet(rec?'Edit supplier':'Quick-add supplier',`<form data-form="sup" novalidate><input type="hidden" name="_id" value="${esc(s.id)}">
+   ${q.map(f=>field(f,s[f[0]])).join('')}
+   <div class="row" style="margin-top:12px"><label class="btn ghost" for="photo">Attach photo</label><input id="photo" type="file" accept="image/*" capture="environment" hidden>${dict?'<button type="button" class="btn ghost" data-act="dictate">Dictate note</button>':''}<span class="mut" id="photoName">${PHOTOS[s.id]?'Photo attached':''}</span></div>
+   <details><summary>More details (${r.length} fields)</summary>${r.map(f=>field(f,s[f[0]])).join('')}</details>
+   <p class="err" id="err" role="alert"></p><button class="btn primary big" type="submit">Save supplier</button></form>`);
+}
+function supRow(s){const a=assess(s);return `<button class="item" data-act="viewSup" data-id="${s.id}"><div class="main"><div class="t">${esc(s.company||'Unnamed')} ${s.demo?'<span class="pill demo">DEMO</span>':''}</div><div class="m">${esc([s.contact,s.country,s.category].filter(Boolean).join(' · '))}</div><div class="row" style="margin-top:6px;gap:6px">${pill(s.status,stCls(s.status))}${s.followUp?pill('Follow up '+fmtDate(s.followUp),daysUntil(s.followUp)<=0?'bad':''):''}</div></div><div class="score" title="Webburner fit">${a.sc.webburner}</div></button>`}
+function filteredSup(){
+  let a=list('suppliers');const q=ui.q.toLowerCase();
+  if(q)a=a.filter(s=>[s.company,s.contact,s.country,s.category,s.notes,s.booth,s.email].join(' ').toLowerCase().includes(q));
+  if(ui.status)a=a.filter(s=>s.status===ui.status);if(ui.cat)a=a.filter(s=>s.category===ui.cat);
+  const f={updated:(x,y)=>(y.updatedAt||0)-(x.updatedAt||0),company:(x,y)=>(x.company||'').localeCompare(y.company||''),follow:(x,y)=>(x.followUp||'9999').localeCompare(y.followUp||'9999'),score:(x,y)=>assess(y).sc.webburner-assess(x).sc.webburner}[ui.sort];
+  return a.sort(f)}
+function supList(){const a=filteredSup();return a.length?a.map(supRow).join(''):`<div class="card">No suppliers match. ${list('suppliers').length?'Clear the filters.':'Tap <b>+ Supplier</b> to add the first one, or import Google Form responses.'}</div>`}
+function viewSup(id){
+  const s=get('suppliers',id);if(!s)return;const a=assess(s);
+  const sc=[['webburner','Webburner commercial fit'],['nifty','Nifty Money strategic fit'],['partner','Partnership potential'],['quality','Lead quality'],['urgency','Follow-up urgency']];
+  const kv=SUP.filter(f=>!['company','notes'].includes(f[0])&&s[f[0]]&&(!Array.isArray(s[f[0]])||s[f[0]].length)).map(f=>`<dt>${f[1]}</dt><dd>${esc(Array.isArray(s[f[0]])?s[f[0]].join(', '):s[f[0]])}</dd>`).join('');
+  sheet(s.company||'Supplier',`<div class="row sp"><h2>${esc(s.company)}</h2>${s.demo?'<span class="pill demo">DEMO DATA</span>':''}</div>
+  ${PHOTOS[s.id]?`<img src="${PHOTOS[s.id]}" alt="Attached photo" style="border-radius:8px;margin-top:10px;max-height:240px">`:''}
+  <p class="sub">${esc(a.summary)}</p>
+  <div class="row" style="margin-top:12px"><button class="btn sm" data-act="editSup" data-id="${id}">Edit</button><button class="btn sm" data-act="mkLead" data-id="${id}" data-biz="webburner">Add to Webburner pipeline</button><button class="btn sm" data-act="mkLead" data-id="${id}" data-biz="nifty">Add to Nifty Money pipeline</button><button class="btn sm danger" data-act="delSup" data-id="${id}">Delete</button></div>
+  <h3 class="sec">Opportunity assessment</h3>
+  <p class="mut" style="font-size:.85rem">Rules-based, not AI. Scores come only from what you recorded.${samp?' Use "Draft with AI" for a written follow-up.':' AI drafting is awaiting configuration in this view.'}</p>
+  <div class="grid g2">${sc.map(([k,l])=>`<div class="card"><div class="row sp"><b>${l}</b><span class="score">${a.sc[k]}</span></div><div class="meter" style="margin:6px 0"><i style="width:${a.sc[k]}%"></i></div><div class="mut" style="font-size:.82rem">${a.why[k].map(esc).join('. ')}.</div></div>`).join('')}</div>
+  <div class="card" style="margin-top:12px"><b>Best next action</b><p style="margin:4px 0 0">${esc(a.next)}</p></div>
+  <div class="card" style="margin-top:12px"><b>Questions to ask next</b><ul style="margin:6px 0 0;padding-left:20px">${a.qs.map(q=>`<li>${esc(q)}</li>`).join('')}</ul></div>
+  <div class="card" style="margin-top:12px"><b>Follow-up message</b><pre class="txt" id="fmsg">${esc(a.msg)}</pre><div class="row" style="margin-top:8px"><button class="btn sm" data-act="copyEl" data-el="fmsg">Copy</button>${samp&&s.permission==='Yes'?`<button class="btn sm" data-act="genAI" data-id="${id}">Draft with AI</button>`:''}</div></div>
+  ${s.notes?`<h3 class="sec">Notes</h3><pre class="txt">${esc(s.notes)}</pre>`:''}
+  <h3 class="sec">Record</h3><dl class="kv">${kv}</dl>`);
+}
+/* ---------- views ---------- */
+function tally(arr){const m={};arr.forEach(x=>{if(x==null||x===''||x==='Unknown'||x==='Not recorded')return;m[x]=(m[x]||0)+1});return Object.entries(m).sort((a,b)=>b[1]-a[1])}
+function bars(e,empty){if(!e.length)return `<p class="mut">${empty||'No data yet. This fills in as you save suppliers.'}</p>`;const mx=e[0][1];return e.slice(0,8).map(([l,n])=>`<div class="bar"><span class="bl" title="${esc(l)}">${esc(l)}</span><span class="bt"><i style="width:${Math.round(n/mx*100)}%"></i></span><b>${n}</b></div>`).join('')}
+function eventState(){const t=todayStr();if(t<EVENT_DAYS[0]){const d=daysUntil(EVENT_DAYS[0]);return{txt:d===1?'Starts tomorrow':'Starts in '+d+' days',pct:0}}
+  if(t===EVENT_DAYS[0])return{txt:'Day 1 of 2 in progress',pct:25};if(t===EVENT_DAYS[1])return{txt:'Day 2 of 2 in progress',pct:75};return{txt:'Event finished. Start the 30-day plan.',pct:100}}
+function dueItems(){const t=addDays(todayStr(),2),out=[];
+  list('suppliers').forEach(s=>{if(s.followUp&&s.followUp<=t&&!['Won','Lost'].includes(s.status))out.push({kind:'sup',id:s.id,name:s.company,date:s.followUp})});
+  list('contacts').forEach(c=>{if(c.followUp&&c.followUp<=t)out.push({kind:'con',id:c.id,name:c.name,date:c.followUp})});
+  return out.sort((a,b)=>a.date.localeCompare(b.date))}
+function agendaFor(day){return list('sessions').filter(s=>s.day===day).sort((a,b)=>(a.start||'').localeCompare(b.start||''))}
+function V_event(){
+  const st=eventState(),day=EVENT_DAYS.includes(todayStr())?todayStr():EVENT_DAYS[0],ag=agendaFor(day),due=dueItems(),s=SET();
+  return `<div class="row sp"><div><h2>Event mode</h2><p class="sub">${st.txt} &middot; ExCeL London, 19-20 November 2026</p></div></div>
+  <div class="meter" style="margin-top:10px"><i style="width:${st.pct}%"></i></div>
+  <div class="grid g2" style="margin-top:16px"><button class="btn primary big" data-act="addSup">Add supplier</button><button class="btn big" data-act="addCon">Add contact</button><button class="btn big" data-act="qrForm">Show supplier form QR</button><button class="btn big" data-act="qrContact">Show my contact QR</button></div>
+  <div class="fld"><label for="gq">Search suppliers and contacts</label><input id="gq" type="search" placeholder="Company, name, booth, country" value="${esc(ui.gq)}" autocomplete="off"></div><div id="gres">${globalRes()}</div>
+  <h3 class="sec">Follow-ups due (next 2 days)</h3><div class="list">${due.length?due.map(d=>`<button class="item" data-act="${d.kind==='sup'?'viewSup':'editCon'}" data-id="${d.id}"><div class="main"><div class="t">${esc(d.name)}</div><div class="m">${d.kind==='sup'?'Supplier':'Contact'} &middot; ${fmtDate(d.date)}</div></div>${pill(d.date<todayStr()?'Overdue':d.date===todayStr()?'Today':'Soon',d.date<todayStr()?'bad':'warn')}</button>`).join(''):'<div class="card mut">Nothing due. Set follow-up dates when you save a record.</div>'}</div>
+  <h3 class="sec">Agenda for ${fmtDate(day)}</h3><div class="list">${ag.length?ag.map(sessRow).join(''):'<div class="card mut">No timed sessions yet. Add times in the Agenda tab once you have confirmed them on the official programme.</div>'}</div>
+  ${!(s.formUrl)?'<div class="banner">Supplier form QR needs your real Google Form link. Add it under Setup.</div>':''}`}
+function globalRes(){const q=ui.gq.trim().toLowerCase();if(!q)return '';
+  const a=list('suppliers').filter(s=>[s.company,s.contact,s.country,s.booth,s.category].join(' ').toLowerCase().includes(q)).slice(0,6).map(supRow);
+  const b=list('contacts').filter(c=>[c.name,c.company,c.where].join(' ').toLowerCase().includes(q)).slice(0,6).map(conRow);
+  return `<div class="list">${a.concat(b).join('')||'<div class="card mut">No matches.</div>'}</div>`}
+function V_command(){
+  const sup=list('suppliers'),con=list('contacts'),leads=list('leads'),sess=list('sessions');
+  const wbL=leads.filter(l=>l.biz==='webburner'&&l.stage!=='Lost'),nmL=leads.filter(l=>l.biz==='nifty'&&l.stage!=='Lost');
+  const linked=b=>new Set(leads.filter(l=>l.biz===b&&l.supplierId).map(l=>l.supplierId));
+  const wbN=wbL.length+sup.filter(s=>['Webburner','Both'].includes(s.opp)&&!linked('webburner').has(s.id)).length;
+  const nmN=nmL.length+sup.filter(s=>['Nifty Money','Both'].includes(s.opp)&&!linked('nifty').has(s.id)).length;
+  const qual=sup.filter(s=>QUALIFIED.includes(s.status)).length+leads.filter(l=>['Qualified','Discovery meeting','Proposal requested','Proposal sent','Negotiation','Won'].includes(l.stage)).length;
+  const inv=con.filter(c=>c.ctype==='Investor').length;
+  const part=sup.filter(s=>['Partnership','Import/export/distribution'].includes(s.opp)).length+leads.filter(l=>l.category==='Strategic partnerships'||l.category==='Fintech partnerships').length;
+  const fm=sess.filter(s=>s.type==='meeting').length+con.filter(c=>c.followUp).length;
+  const val=leads.filter(l=>Number(l.value)>0&&l.stage!=='Lost');const tot=val.reduce((a,l)=>a+Number(l.value),0);
+  const st=eventState();
+  const stat=(n,l)=>`<div class="card stat"><b>${n}</b><span>${l}</span></div>`;
+  return `<h2>Command centre</h2><p class="sub">Every figure comes from records you saved. Demo records are marked and count until you clear them.</p>
+  <div class="grid g4" style="margin-top:14px">${stat(sup.length,'Suppliers discovered')}${stat(sup.filter(s=>s.source==='Google Form').length,'Form submissions imported')}${stat(con.length,'Business contacts')}${stat(qual,'Qualified leads')}${stat(wbN,'Webburner opportunities')}${stat(nmN,'Nifty Money opportunities')}${stat(inv,'Potential investors')}${stat(part,'Partnership opportunities')}${stat(fm,'Follow-up meetings')}${stat(val.length?'£'+tot.toLocaleString('en-GB'):'None','Pipeline value'+(val.length?' ('+val.length+' with values, GBP assumed)':' (no values entered)'))}</div>
+  <div class="card" style="margin-top:12px"><div class="row sp"><b>Event progress</b><span class="mut">${st.txt}</span></div><div class="meter" style="margin-top:8px"><i style="width:${st.pct}%"></i></div></div>
+  <div class="grid g2" style="margin-top:12px">
+   <div class="card"><h3>Supplier categories</h3>${bars(tally(sup.map(s=>s.category)))}</div>
+   <div class="card"><h3>Countries represented</h3>${bars(tally(sup.map(s=>s.country)))}</div>
+   <div class="card"><h3>Business challenges</h3>${bars(tally(sup.map(s=>s.challenge)))}</div>
+   <div class="card"><h3>AI adoption</h3>${bars(tally(sup.map(s=>s.ai)))}</div>
+   <div class="card"><h3>Technology demand</h3>${bars(tally(sup.flatMap(s=>s.techNeeds||[])))}</div>
+   <div class="card"><h3>Commercial opportunities</h3>${bars(tally(sup.map(s=>s.opp==='None yet'?'':s.opp)))}</div>
+   <div class="card"><h3>Lead status</h3>${bars(tally(sup.map(s=>s.status)))}</div>
+   <div class="card"><h3>Pipeline stages (both businesses)</h3>${bars(tally(leads.map(l=>l.stage)),'No pipeline leads yet.')}</div></div>`}
+function V_suppliers(){
+  const cats=[...new Set(list('suppliers').map(s=>s.category).filter(Boolean))].sort();
+  return `<div class="row sp"><div><h2>Suppliers</h2><p class="sub">${list('suppliers').length} records. The number on the right is Webburner fit.</p></div><div class="row"><button class="btn sm" data-act="importSup">Import CSV</button><button class="btn sm" data-act="exportSup">Export CSV</button></div></div>
+  <div class="filters"><input id="q" type="search" placeholder="Search" aria-label="Search suppliers" value="${esc(ui.q)}"><select id="fstatus" aria-label="Status"><option value="">All statuses</option>${STATUS.map(s=>`<option${ui.status===s?' selected':''}>${s}</option>`).join('')}</select><select id="fcat" aria-label="Category"><option value="">All categories</option>${cats.map(c=>`<option${ui.cat===c?' selected':''}>${esc(c)}</option>`).join('')}</select><select id="fsort" aria-label="Sort">${[['updated','Recently updated'],['company','Company A-Z'],['follow','Follow-up date'],['score','Webburner fit']].map(([v,l])=>`<option value="${v}"${ui.sort===v?' selected':''}>${l}</option>`).join('')}</select></div>
+  <div class="list" id="list">${supList()}</div>
+  <div class="row" style="margin-top:16px"><button class="btn sm ghost" data-act="loadDemo">Load 3 demo records</button><button class="btn sm ghost" data-act="clearDemo">Clear demo records</button></div>`}
+function leadCard(l){return `<button class="item" data-act="editLead" data-id="${l.id}"><div class="main"><div class="t">${esc(l.company||l.name||'Lead')}</div><div class="m">${esc(l.category||'')}${Number(l.value)>0?' · £'+Number(l.value).toLocaleString('en-GB'):''}</div>${l.next?`<div class="m">Next: ${esc(l.next)}${l.due?' ('+fmtDate(l.due)+')':''}</div>`:''}</div></button>`}
+function V_pipelines(){
+  const b=ui.biz,ls=list('leads').filter(l=>l.biz===b);
+  return `<div class="row sp"><div><h2>Pipelines</h2><p class="sub">Webburner and Nifty Money are kept separate, with their own leads and history.</p></div><button class="btn primary sm" data-act="addLead">Add lead</button></div>
+  <div class="row" style="margin-top:12px">${Object.keys(BIZ).map(k=>`<button class="btn sm ${b===k?'primary':'ghost'}" data-act="biz" data-biz="${k}">${BIZ[k]} (${list('leads').filter(l=>l.biz===k).length})</button>`).join('')}</div>
+  <div class="lanes">${STAGES.map(s=>{const c=ls.filter(l=>l.stage===s);return `<div class="lane"><h3><span>${s}</span><span>${c.length}</span></h3>${c.map(leadCard).join('')}</div>`}).join('')}</div>`}
+function conRow(c){return `<button class="item" data-act="editCon" data-id="${c.id}"><div class="main"><div class="t">${esc(c.name||'Unnamed')}</div><div class="m">${esc([c.role,c.company,c.where].filter(Boolean).join(' · '))}</div><div class="row" style="margin-top:6px;gap:6px">${c.ctype?pill(c.ctype):''}${c.card&&c.card!=='None'?pill('Card '+c.card.toLowerCase()):''}${c.followUp?pill('By '+fmtDate(c.followUp),daysUntil(c.followUp)<=0?'bad':''):''}</div></div></button>`}
+function conList(){let a=list('contacts');const q=ui.nq.toLowerCase();if(q)a=a.filter(c=>[c.name,c.company,c.where,c.discussed,c.interests].join(' ').toLowerCase().includes(q));if(ui.ntype)a=a.filter(c=>c.ctype===ui.ntype);
+  if(ui.ntab==='cards')a=a.filter(c=>c.card&&c.card!=='None');
+  a.sort((x,y)=>(y.updatedAt||0)-(x.updatedAt||0));return a.length?a.map(conRow).join(''):'<div class="card mut">Nothing here yet. Tap <b>Add contact</b> to log who you met.</div>'}
+function V_network(){
+  const t=ui.ntab;
+  let body;
+  if(t==='speakers')body=`<p class="sub">Public facts are labelled with their source. Anything marked inference is my assumption. Priority combines relevance, accessibility and commercial value (scores are my estimates; edit nothing here, they guide you only).</p><div class="list">${SPK.slice().sort((a,b)=>spScore(b)-spScore(a)).map(s=>`<button class="item" data-act="viewSpk" data-id="${s.id}"><div class="main"><div class="t">${esc(s.name)}</div><div class="m">${esc(s.role)}</div></div><span class="score" title="Priority">${spScore(s)}</span></button>`).join('')}</div>`;
+  else body=`<div class="filters"><input id="nq" type="search" placeholder="Search" aria-label="Search contacts" value="${esc(ui.nq)}"><select id="ntype" aria-label="Type"><option value="">All types</option>${CON[6][3].map(o=>`<option${ui.ntype===o?' selected':''}>${o}</option>`).join('')}</select></div><div class="list" id="clist">${conList()}</div><div class="row" style="margin-top:14px"><button class="btn sm" data-act="exportCon">Export contacts CSV</button></div>`;
+  return `<div class="row sp"><div><h2>Network</h2><p class="sub">Networking log, business card tracker and speaker profiles.</p></div><button class="btn primary sm" data-act="addCon">Add contact</button></div>
+  <div class="row" style="margin-top:12px">${[['contacts','Contacts and log'],['cards','Business cards'],['speakers','Speakers']].map(([k,l])=>`<button class="btn sm ${t===k?'primary':'ghost'}" data-act="ntab" data-t="${k}">${l}</button>`).join('')}</div><div style="margin-top:4px">${body}</div>`}
+function viewSpk(id){const s=SPK.find(x=>x.id===id);if(!s)return;
+  sheet(s.name,`<h2>${esc(s.name)}</h2><p class="sub">${esc(s.role)}</p>
+  <div class="grid g3" style="margin-top:12px"><div class="card stat"><b>${spScore(s)}</b><span>Priority score</span></div><div class="card stat"><b>${s.rel}/5</b><span>Relevance</span></div><div class="card stat"><b>${s.acc}/5 · ${s.val}/5</b><span>Access · value (estimates)</span></div></div>
+  <h3 class="sec">Public information</h3><ul>${s.pub.map(p=>`<li>${esc(p)}</li>`).join('')}</ul><p class="mut" style="font-size:.82rem">Source: ${esc(s.src)}. Biography, career history and investments are not included unless a source was retrieved.</p>
+  <h3 class="sec">Assumptions (not verified)</h3><ul>${s.assume.map(p=>`<li>${esc(p)}</li>`).join('')}</ul>
+  <h3 class="sec">Introduction</h3><div class="card"><pre class="txt" id="spi">${esc(s.intro)}</pre><button class="btn sm" style="margin-top:8px" data-act="copyEl" data-el="spi">Copy</button></div>
+  <h3 class="sec">Three questions</h3><ol>${s.qs.map(q=>`<li>${esc(q)}</li>`).join('')}</ol>
+  <h3 class="sec">Partnership angles</h3><ul>${s.angles.map(q=>`<li>${esc(q)}</li>`).join('')}</ul>
+  <h3 class="sec">Post-event follow-up</h3><div class="card"><pre class="txt" id="spf">${esc(s.follow)}</pre><button class="btn sm" style="margin-top:8px" data-act="copyEl" data-el="spf">Copy</button></div>
+  <p class="banner">No meetings with anyone listed here are arranged. Do not look for private contact details; use LinkedIn or the event app.</p>`)}
+function sessRow(s){const conf=conflictsOf(s);return `<button class="item" data-act="editSess" data-id="${s.id}"><div class="main"><div class="t">${esc(s.title)}</div><div class="m">${s.start?esc(s.start+(s.end?'-'+s.end:'')):'Time to confirm'}${s.stage?' · '+esc(s.stage):''}${s.type==='meeting'&&s.person?' · '+esc(s.person):''}</div><div class="row" style="margin-top:6px;gap:6px">${pill('Priority '+(s.priority||3),(s.priority||3)>=5?'warn':'')}${s.type==='meeting'?pill('Meeting'):''}${s.tbc?pill('Unverified','warn'):''}${s.access&&s.access!=='Open to all ticket holders'?pill(s.access):''}${conf.length?pill('Clash with '+conf.length,'bad'):''}${s.reminder?pill('Reminder'):''}</div></div></button>`}
+function conflictsOf(s){if(!s.day||!s.start)return[];const t=x=>{const p=x.split(':').map(Number);return p[0]*60+p[1]},en=x=>t(x.end||x.start)+(x.end?0:1);
+  return list('sessions').filter(o=>o.id!==s.id&&o.day===s.day&&o.start&&t(o.start)<en(s)&&t(s.start)<en(o))}
+function V_agenda(){
+  const days=[...EVENT_DAYS,''],d=ui.day,items=list('sessions').filter(s=>s.day===d).sort((a,b)=>(a.start||'').localeCompare(b.start||'')||(b.priority||0)-(a.priority||0));
+  return `<div class="row sp"><div><h2>Agenda and meetings</h2><p class="sub">Sessions below came from your brief. Times are not set until you confirm them on the official programme.</p></div><div class="row"><button class="btn sm" data-act="addSess" data-type="session">Add session</button><button class="btn sm" data-act="addSess" data-type="meeting">Add meeting</button></div></div>
+  <div class="banner">Check which sessions your ticket category can enter. The agenda tool flags clashes only between times you enter.</div>
+  <div class="row" style="margin-top:12px">${days.map(x=>`<button class="btn sm ${d===x?'primary':'ghost'}" data-act="day" data-d="${x}">${x?fmtDate(x):'Time to confirm'} (${list('sessions').filter(s=>s.day===x).length})</button>`).join('')}</div>
+  <div class="list">${items.length?items.map(sessRow).join(''):'<div class="card mut">Nothing on this day yet.</div>'}</div>`}
+const PITCH=()=>{const s=SET(),n=s.name||'Mihir Patel';return [
+ ['15-second introduction',`Hi, I'm ${n}. I'm a founder and PhD researcher in London, building at the intersection of AI, fintech, technology and international entrepreneurship. What brings you to CoCreate?`],
+ ['30-second founder introduction',`I'm ${n}. I run Webburner Tech, which builds software, automation and AI integrations for growing businesses, and Nifty Money, a fintech and investment analytics business. I'm also a PhD researcher at the University of East London, working on explainable reinforcement learning for portfolio optimisation in Indian equity markets. Today I'm here to learn how suppliers and SMEs are really using AI.`],
+ ['60-second Webburner pitch',`Webburner Tech helps growing businesses turn manual work into software. We build custom software, web and mobile apps, e-commerce platforms, CRM and ERP systems, and we integrate AI and automation into everyday processes. We also do cloud infrastructure, analytics and digital transformation consulting. We're most useful to manufacturers, distributors and SMEs in the UK and Europe who know their process is slow but don't know where to start. A good first step is a short conversation about the one process that costs you the most time.\n\nCheck before use: confirm each service against webburner.tech. Do not mention clients or results unless you can evidence them.`],
+ ['60-second Nifty Money pitch',`Nifty Money is a fintech and investment intelligence business. We work on investment analytics, portfolio and risk analytics, financial data infrastructure and quantitative research, with AI used to turn data into decisions. I'm looking for fintech partners, data providers and technology integrations. If you work in payments, trade finance or data, I'd like to hear where analytics would help you.\n\nCheck before use: confirm wording against nifty.money and your actual regulatory status. Do not describe performance, clients or authorisation unless you can prove it.`],
+ ['Supplier conversation opener',`What's the hardest part of getting your products in front of UK and European buyers right now?`],
+ ['Investor conversation opener',`I'm a founder working across AI and fintech between London and India. I'm curious what you are seeing in AI-enabled trade and SME software. What's caught your attention this year?`],
+ ['Strategic partnership pitch',`I'd like to explore a simple pilot: [partner] brings [their strength]; I bring software, automation and analytics capability through Webburner Tech and Nifty Money. We could test one use case with one customer over 90 days and share the results. Would you be open to a 30-minute call to scope it?`],
+ ['LinkedIn connection message',`Hi [first name], good to meet you at CoCreate London. I enjoyed our chat about [topic]. I'd like to stay in touch. Mihir`],
+ ['Email follow-up',`Subject: Following up from CoCreate London\n\nHi [first name],\n\nThank you for the conversation at CoCreate. You mentioned [challenge]. I'd be glad to share [resource or idea] and could do a 20-minute call on [date options].\n\nIf you'd rather not hear from me, tell me and I'll remove your details.\n\nBest,\n${n}`],
+ ['WhatsApp follow-up',`Hi [first name], it's ${n} from CoCreate London. Great to talk about [topic]. I'll send [promised item] by [date]. Is this the best number to reach you?`]]};
+function V_pitch(){
+  return `<h2>Pitch library</h2><p class="sub">Drafts from your brief. Set your name under Setup. Replace anything in [brackets].</p><div class="banner">I could not read webburner.tech or nifty.money from this session, so these pitches use only the descriptions in your brief. Check each claim against the live sites before saying it aloud.</div>
+  <div class="grid g2" style="margin-top:14px">${PITCH().map((p,i)=>`<div class="card"><div class="row sp"><h3>${esc(p[0])}</h3><button class="btn sm" data-act="copyEl" data-el="p${i}">Copy</button></div><pre class="txt" id="p${i}">${esc(p[1])}</pre></div>`).join('')}</div>`}
+function V_campaign(){
+  const ps=list('posts'),by=ch=>ps.filter(p=>p.channel===ch);
+  return `<h2>48 Hours at CoCreate London</h2><p class="sub">Content planner. Everything in [brackets] must come from what actually happens. Nothing here claims an outcome.</p>
+  <div class="card" style="margin-top:12px"><h3>Visual identity</h3><p class="mut" style="margin:6px 0">Deep navy, white and one electric blue. Space Grotesk for headlines, Inter for text. Use a plain blue band with the title "48 Hours at CoCreate London" and the date line "19-20 November 2026, ExCeL London". Keep your own photos; no event or speaker logos without permission.</p><div class="row"><span class="swatch" style="background:#09112a" title="Navy"></span><span class="swatch" style="background:#3d7bff" title="Electric blue"></span><span class="swatch" style="background:#e9eefc" title="Off-white"></span><span class="swatch" style="background:#122044" title="Panel navy"></span></div>
+  <p class="mut" style="margin:8px 0 0;font-size:.85rem">Positioning: a thoughtful founder learning in public. Lead with a question or an observation, mention your companies only when relevant.</p></div>
+  ${['LinkedIn','Instagram','Video script','Interview Qs','Shot list','Newsletter'].map(ch=>`<h3 class="sec">${ch==='Interview Qs'?'Interview questions':ch==='Shot list'?'Photography shot list':ch}</h3><div class="grid g2" style="margin-top:8px">${by(ch).map(p=>`<div class="card"><div class="row sp"><b>${esc(p.title)}</b>${pill(p.status,p.status==='Posted'?'good':p.status==='Scheduled'?'warn':'')}</div><pre class="txt">${esc(p.text)}</pre><div class="row" style="margin-top:8px"><button class="btn sm" data-act="copyPost" data-id="${p.id}">Copy</button><button class="btn sm ghost" data-act="editPost" data-id="${p.id}">Edit</button></div></div>`).join('')}</div>`).join('')}`}
+function planTemplate(){const D=(n)=>addDays(EVENT_DAYS[1],n);return [
+ ['Days 1-2',D(2),'Export a CSV backup of suppliers and contacts'],['Days 1-2',D(2),'Mark every supplier Qualified, Nurture or Lost'],['Days 1-2',D(2),'Set follow-up dates and pick the top 20 leads'],
+ ['Days 3-5',D(5),'Send personalised follow-ups to top leads (permission confirmed only)'],['Days 3-5',D(5),'Send LinkedIn connection requests with a personal note'],['Days 3-5',D(5),'Ask Google Form respondents without consent for permission before any marketing'],
+ ['Days 6-10',D(10),'Book discovery calls with qualified leads'],['Days 6-10',D(10),'Run discovery calls and record notes in each profile'],['Days 6-10',D(10),'Update pipeline stages after every call'],
+ ['Days 11-15',D(15),'Prepare Webburner proposals'],['Days 11-15',D(15),'Scope partnership discussions for Nifty Money'],['Days 11-15',D(15),'Send proposals and log them in the pipeline'],
+ ['Days 16-20',D(20),'Generate the first findings from the Report tab'],['Days 16-20',D(20),'Check anonymisation, then publish the first findings'],['Days 16-20',D(20),'Send the post-event newsletter'],
+ ['Days 21-30',D(30),'Chase open proposals'],['Days 21-30',D(30),'Close or park initial opportunities and confirm partnerships'],['Days 21-30',D(30),'Review results: leads, calls, proposals, wins, lessons']]}
+function V_plan(){
+  const ts=list('tasks').sort((a,b)=>(a.due||'').localeCompare(b.due||'')),ph=[...new Set(ts.map(t=>t.phase||'Other'))];
+  const done=ts.filter(t=>t.done).length;
+  return `<div class="row sp"><div><h2>30-day plan</h2><p class="sub">Day 1 is Saturday 21 November 2026. ${ts.length?done+' of '+ts.length+' done.':''}</p></div><div class="row">${ts.some(t=>t.template)?'':'<button class="btn primary sm" data-act="planCreate">Create the plan</button>'}<button class="btn sm" data-act="addTask">Add task</button></div></div>
+  ${ts.length?ph.map(p=>`<h3 class="sec">${esc(p)}</h3><div class="list">${ts.filter(t=>(t.phase||'Other')===p).map(t=>`<div class="item" style="cursor:default"><label style="display:flex;gap:10px;align-items:flex-start;flex:1;min-width:0;min-height:44px"><input type="checkbox" data-act="toggleTask" data-id="${t.id}"${t.done?' checked':''} aria-label="Done"><span class="main"><span class="t" style="${t.done?'text-decoration:line-through;color:var(--mute)':''}">${esc(t.title)}</span><br><span class="m">Due ${fmtDate(t.due)}</span></span></label><button class="btn sm ghost" data-act="delTask" data-id="${t.id}">Remove</button></div>`).join('')}</div>`).join(''):'<div class="card mut" style="margin-top:12px">No tasks yet. Create the plan to add 18 tasks with deadlines.</div>'}`}
+function reportData(){
+  const sup=list('suppliers').filter(s=>!s.demo),n=sup.length,pc=x=>n?Math.round(x/n*100)+'%':'0%';
+  const top=(arr,k=3)=>tally(arr).slice(0,k).map(([l,c])=>`${l} (${c})`).join(', ')||'no data';
+  const moq=sup.map(s=>s.moq).filter(Boolean);const ai=tally(sup.map(s=>s.ai));
+  const adopted=sup.filter(s=>['Using in some areas','Embedded'].includes(s.ai)).length,noAI=sup.filter(s=>['None','Exploring'].includes(s.ai)).length;
+  const uk=sup.filter(s=>s.ukPresence==='Yes'||/uk/i.test(s.exports||'')).length,eu=sup.filter(s=>s.euPresence==='Yes'||/europe|eu\b/i.test(s.exports||'')).length;
+  const notUk=sup.filter(s=>s.ukPresence==='No').length;
+  const needs=tally(sup.flatMap(s=>s.techNeeds||[]));
+  const secs=[
+   ['1. Executive summary',[n?`Based on ${n} supplier conversation(s) recorded at CoCreate Europe 2026 (19-20 November, ExCeL London). Sample is ${n<30?'small, so treat findings as indicative':'large enough for directional findings'}.`:'No non-demo supplier records yet. This report fills in as you save real suppliers.',n?`Most common challenge: ${top(sup.map(s=>s.challenge),1)}. Most requested technology: ${needs[0]?needs[0][0]:'none recorded'}.`:'']],
+   ['2. Supplier demographics',[`Countries: ${top(sup.map(s=>s.country),5)}.`,`Supplier types: ${top(sup.map(s=>s.stype),5)}.`]],
+   ['3. Manufacturing categories',[`Categories: ${top(sup.map(s=>s.category),6)}.`]],
+   ['4. Export market ambitions',[`${uk} supplier(s) (${pc(uk)}) already sell in or mention the UK; ${eu} (${pc(eu)}) mention Europe.`,`Markets named: ${top(sup.flatMap(s=>(s.exports||'').split(/[,;/]/).map(x=>x.trim()).filter(Boolean)),6)}.`]],
+   ['5. MOQ trends',[moq.length?`${moq.length} supplier(s) gave a MOQ. Values as recorded: ${moq.slice(0,12).join('; ')}. (Free text, not normalised.)`:'No MOQ values recorded yet.']],
+   ['6. AI adoption',[`Adoption: ${ai.map(([l,c])=>l+' ('+c+')').join(', ')||'no data'}.`,n?`${adopted} (${pc(adopted)}) use AI in at least some areas; ${noAI} (${pc(noAI)}) use none or are only exploring.`:'']],
+   ['7. Technology gaps',[`Requested technology: ${needs.map(([l,c])=>l+' ('+c+')').join(', ')||'no data'}.`]],
+   ['8. Digital commerce opportunities',[`${sup.filter(s=>(s.techNeeds||[]).some(t=>['Website','E-commerce'].includes(t))).length} supplier(s) asked about a website or e-commerce.`,`${sup.filter(s=>(s.techNeeds||[]).includes('Distribution')).length} asked about distribution.`]],
+   ['9. UK market entry opportunities',[`${notUk} supplier(s) said they are not yet in the UK market.`,`Compliance/UK entry was the main challenge for ${sup.filter(s=>s.challenge==='Compliance/UK entry').length}.`]],
+   ['10. Supplier challenges',[`Challenges: ${top(sup.map(s=>s.challenge),6)}.`]],
+   ['11. Key findings',[n?`1) ${top(sup.map(s=>s.challenge),1)} is the most common challenge. 2) ${pc(noAI)} have little or no AI adoption. 3) Most requested technology: ${needs[0]?needs[0][0]:'n/a'}. Review these against your own notes before publishing.`:'Not enough data yet.']],
+   ['12. Commercial recommendations',[n?'Prioritise follow-ups with suppliers who gave permission and named a technology need. Treat these as drafts for you to review; they are not conclusions.':'Collect more records first.']]];
+  return {n,secs,sup}}
+function V_report(){const r=reportData();
+  return `<div class="row sp"><div><h2>The European Supplier &amp; AI Commerce Report 2026</h2><p class="sub">By Webburner Tech. Generated from saved, non-demo supplier records. Names are never shown. Attribution would need written permission, which this tool does not record.</p></div></div>
+  <div class="row" style="margin-top:10px"><button class="btn primary sm" data-act="repPdf">Export PDF</button><button class="btn sm" data-act="repCsv">Export CSV</button><button class="btn sm" data-act="repMd">Export Markdown</button></div>
+  ${r.n<10?`<div class="banner">Only ${r.n} real supplier record(s). Publish nothing with this sample size except as anecdotal.</div>`:''}
+  ${r.secs.map(([h,l])=>`<div class="card" style="margin-top:12px"><h3>${esc(h)}</h3>${l.filter(Boolean).map(x=>`<p style="margin:6px 0 0">${esc(x)}</p>`).join('')}</div>`).join('')}`}
+function V_setup(){
+  const s=SET(),qs=[['Company name','Short answer','Required'],["Contact person's name",'Short answer','Required'],['Business email','Short answer, email validation','Required'],['Country of manufacture','Dropdown: China, India, Vietnam, Turkey, Poland, Portugal, Italy, Germany, United Kingdom, Other','Required'],['Product category','Dropdown: Consumer electronics, Home and garden, Apparel and textiles, Machinery and industrial, Packaging, Beauty and personal care, Food and beverage, Auto parts, Other','Required'],['Business type','Multiple choice: Manufacturer, OEM/ODM, Trading company, Distributor','Required'],['Typical MOQ','Short answer','Optional'],['Current export markets','Checkboxes: UK, Europe (EU), North America, Middle East, Asia-Pacific, Africa, Latin America, Other','Optional'],['Biggest business challenge','Multiple choice: Finding customers, Logistics/shipping, Cash flow/payments, Digital presence, Compliance/UK entry, Costs/margins, Skills/technology, Other','Required'],['Interest in','Checkboxes: AI, Automation, Website, E-commerce, CRM, Analytics, Distribution, None','Optional'],['Permission for relevant business follow-up','Multiple choice: "Yes, you may contact me about relevant opportunities" / "No, please do not contact me"','Required']];
+  return `<h2>Setup</h2><p class="sub">Your links, the form structure, QR codes, backup and integration status.</p>
+  <div class="card" style="margin-top:12px"><h3>Integration status</h3><table><tbody>
+   <tr><td>Device storage</td><td>${pill('Working','good')} Records save on this phone first.</td></tr>
+   <tr><td>Shared database sync</td><td>${dbh?pill('Connected','good'):pill('Not available in this view','warn')}</td></tr>
+   <tr><td>Google Form</td><td>${s.formUrl?pill('URL saved, untested','warn'):pill('Not connected','warn')} Responses reach the app by CSV import until you set up a sheet export.</td></tr>
+   <tr><td>Google Sheets live link</td><td>${pill('Not connected','warn')} Needs a Google sign-in and an Apps Script or Sheets API setup I could not do here.</td></tr>
+   <tr><td>AI drafting</td><td>${samp?pill('Available (asks consent)','good'):pill('Awaiting configuration','warn')}</td></tr>
+   <tr><td>Email sending</td><td>${pill('Not configured','warn')} Drafts are copy-and-paste.</td></tr></tbody></table></div>
+  <form data-form="settings" class="card" style="margin-top:12px"><h3>Your links and details</h3>
+   ${field(['name','Your name for pitches','text'],s.name||'Mihir Patel')}${field(['formUrl','Google Form link (paste the real link)','url'],s.formUrl)}${field(['email','Your email (for the contact QR)','email'],s.email)}${field(['phone','Your phone (for the contact QR)','tel'],s.phone)}${field(['linkedin','LinkedIn URL','url'],s.linkedin)}${field(['contactUrl','Contact QR destination (optional, overrides the card below)','url'],s.contactUrl)}
+   <button class="btn primary" style="margin-top:12px" type="submit">Save</button></form>
+  <div class="card" style="margin-top:12px"><h3>Business card content</h3><pre class="txt" id="bcard">${esc([s.name||'Mihir Patel','Founder, Webburner Tech and Nifty Money','PhD researcher, University of East London','Building at the intersection of AI, fintech, technology and international entrepreneurship','webburner.tech  |  nifty.money',s.email||'[your email]',s.phone||'[your phone]',s.linkedin||''].filter(Boolean).join('\n'))}</pre><button class="btn sm" data-act="copyEl" data-el="bcard">Copy</button></div>
+  <div class="card" style="margin-top:12px"><h3>Google Form: exact structure</h3><p class="mut">About 60 seconds. Title: "Quick supplier survey, CoCreate London".</p><div class="scroll-x"><table><thead><tr><th>#</th><th>Question</th><th>Type and options</th><th></th></tr></thead><tbody>${qs.map((q,i)=>`<tr><td>${i+1}</td><td>${esc(q[0])}</td><td>${esc(q[1])}</td><td>${q[2]}</td></tr>`).join('')}</tbody></table></div>
+   <p>Under the permission question add this text: "Mihir Patel (Webburner Tech and Nifty Money) will use your answers only to follow up on relevant business topics and for anonymised market research. Ask to be removed at any time: [your email]."</p>
+   <ol><li>Go to forms.google.com, create a blank form, add the questions above.</li><li>Settings: collect no extra data, turn off "Limit to 1 response" so stand visitors can share a device.</li><li>Responses tab: click "Link to Sheets" to create the response spreadsheet.</li><li>Send: copy the link, paste it above, then show the QR from Event mode.</li><li>To bring responses in: in the Sheet use File, Download, CSV. Then Suppliers, Import CSV and choose the file or paste it. Duplicates (same company and email) are skipped.</li></ol></div>
+  <div class="grid g2" style="margin-top:12px"><div class="card"><h3>Supplier form QR</h3><div id="qr1">${s.formUrl?'':'<p class="mut">Paste your real form link above first.</p>'}</div>${s.formUrl?'<button class="btn sm" data-act="saveQr" data-t="form" style="margin-top:8px">Save QR image</button>':''}</div>
+   <div class="card"><h3>My contact QR</h3><div id="qr2"><p class="mut">${s.contactUrl||s.email||s.phone||s.linkedin?'':'Add your details above first.'}</p></div>${s.contactUrl||s.email||s.phone?'<button class="btn sm" data-act="saveQr" data-t="contact" style="margin-top:8px">Save QR image</button>':''}</div></div>
+  <div class="card" style="margin-top:12px"><h3>Backup and restore</h3><p class="mut">Records live on this device and, where available, the shared database. Export a backup after each day.</p><div class="row"><button class="btn sm" data-act="backup">Export backup (JSON)</button><label class="btn sm ghost" for="rest">Restore backup</label><input type="file" id="rest" accept=".json,application/json" hidden></div></div>
+  <div class="card" style="margin-top:12px"><h3>Data protection</h3><p class="mut" style="margin:6px 0 0">Collect only what you need, record contact permission, send marketing only where it is "Yes", and delete records when someone asks. The report is aggregated and anonymised. Supplier data on this device is only as safe as the phone's lock screen.</p></div>
+  <p class="mut" style="font-size:.8rem">Technical note: the brief asked for Next.js and Supabase. This is a single self-contained page so it works tomorrow; the data model maps to the same tables if you move later.</p>`}
+function drawQR(el,text){el.innerHTML='';if(!window.QRCode||!text){el.innerHTML='<p class="mut">QR library did not load. Reconnect and reopen.</p>';return}new QRCode(el,{text,width:200,height:200,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});const im=$('img,canvas',el);if(im)im.style.cssText='background:#fff;padding:8px;border-radius:8px;max-width:100%;height:auto'}
+function contactPayload(){const s=SET();if(s.contactUrl)return s.contactUrl;if(!(s.email||s.phone||s.linkedin))return '';const n=(s.name||'Mihir Patel').split(' ');return ['BEGIN:VCARD','VERSION:3.0','N:'+n.slice(-1)+';'+n.slice(0,-1).join(' '),'FN:'+(s.name||'Mihir Patel'),'ORG:Webburner Tech; Nifty Money','TITLE:Founder',s.email?'EMAIL:'+s.email:'',s.phone?'TEL:'+s.phone:'',s.linkedin?'URL:'+s.linkedin:'','END:VCARD'].filter(Boolean).join('\n')}
+const VIEWS={event:['Event',V_event],command:['Command',V_command],suppliers:['Suppliers',V_suppliers],pipelines:['Pipelines',V_pipelines],network:['Network',V_network],agenda:['Agenda',V_agenda],pitch:['Pitch',V_pitch],campaign:['Campaign',V_campaign],plan:['30-day plan',V_plan],report:['Report',V_report],setup:['Setup',V_setup]};
+let cur='event';
+function render(){
+  $('#tabs').innerHTML=Object.entries(VIEWS).map(([k,v])=>`<a href="#${k}"${k===cur?' aria-current="page"':''}>${v[0]}</a>`).join('');
+  $('#app').innerHTML=VIEWS[cur][1]();
+  $('#fab').textContent=cur==='network'?'+ Contact':'+ Supplier';$('#fab').dataset.act=cur==='network'?'addCon':'addSup';
+  if(cur==='setup'){const s=SET();if(s.formUrl)drawQR($('#qr1'),s.formUrl);const p=contactPayload();if(p)drawQR($('#qr2'),p)}
+}
+function route(){const h=location.hash.slice(1);cur=VIEWS[h]?h:'event';render();window.scrollTo(0,0)}
+addEventListener('hashchange',route);
+
+/* ---------- actions ---------- */
+function conForm(rec){const c=rec||{id:uid(),ctype:'Prospect',biz:'Both',card:'None',permission:'Unknown'};
+  sheet(rec?'Edit contact':'Add contact',`<form data-form="con" novalidate><input type="hidden" name="_id" value="${esc(c.id)}">${CON.map(f=>field(f,c[f[0]])).join('')}<p class="err" id="err" role="alert"></p><button class="btn primary big" type="submit">Save contact</button>${rec?`<button class="btn danger" type="button" style="margin-top:10px" data-act="delCon" data-id="${c.id}">Delete contact</button>`:''}</form>`)}
+const LEAD=b=>[['company','Company','text'],['name','Contact','text'],['category','Category','select',CATS[b]],['stage','Stage','select',STAGES],['value','Value in GBP (leave blank if unknown)','number'],['next','Next action','text'],['due','Due date','date'],['notes','Notes','area']];
+function leadForm(rec,b){b=rec?rec.biz:b;const l=rec||{id:uid(),biz:b,stage:'Discovered'};
+  sheet((rec?'Edit lead':'Add lead')+' · '+BIZ[b],`<form data-form="lead" novalidate><input type="hidden" name="_id" value="${esc(l.id)}"><input type="hidden" name="_biz" value="${b}">${LEAD(b).map(f=>field(f,l[f[0]])).join('')}<p class="err" id="err" role="alert"></p><button class="btn primary big" type="submit">Save lead</button>${rec?`<button class="btn danger" type="button" style="margin-top:10px" data-act="delLead" data-id="${l.id}">Delete lead</button><h3 class="sec">History</h3><ul>${(l.history||[]).slice().reverse().map(h=>`<li>${esc(h.txt)} <span class="mut">${new Date(h.ts).toLocaleString('en-GB')}</span></li>`).join('')||'<li class="mut">No history</li>'}</ul>`:''}</form>`)}
+function sessForm(rec,type){const s=rec||{id:uid(),type:type||'session',priority:3,day:ui.day,access:'Check ticket'};
+  const f=[['title',s.type==='meeting'?'Meeting with':'Session title','text'],...(s.type==='meeting'?[['person','Person or company','text']]:[]),['day','Day','select',['',...EVENT_DAYS]],['start','Start time','time'],['end','End time','time'],['stage','Stage or location','text'],['priority','Priority (1-5)','select',['1','2','3','4','5']],['access','Access','select',['Check ticket','Open to all ticket holders','Registration or invite only']],['reminder','Reminder','select',['No','Yes']],['notes','Personal notes','area']];
+  sheet(rec?'Edit item':'Add '+s.type,`<form data-form="sess" novalidate><input type="hidden" name="_id" value="${esc(s.id)}"><input type="hidden" name="_type" value="${s.type}">${f.map(x=>field(x,x[0]==='priority'?String(s.priority):x[0]==='reminder'?(s.reminder?'Yes':'No'):s[x[0]])).join('')}<p class="mut" style="font-size:.82rem">Day shows as blank for "time to confirm". Meetings you log here are your own plans; they are not confirmed with the other person.</p><p class="err" id="err" role="alert"></p><button class="btn primary big" type="submit">Save</button>${rec?`<button class="btn danger" type="button" style="margin-top:10px" data-act="delSess" data-id="${s.id}">Delete</button>`:''}</form>`)}
+const confirmed={};
+function twoStep(key,btn,fn){if(confirmed[key]){delete confirmed[key];fn();return}confirmed[key]=1;btn.textContent='Tap again to confirm';setTimeout(()=>{delete confirmed[key];if(btn.isConnected)btn.textContent='Delete'},4000)}
+const ACT={
+ close:closeSheet,addSup:()=>supForm(),editSup:t=>supForm(get('suppliers',t.dataset.id)),viewSup:t=>viewSup(t.dataset.id),
+ delSup:t=>twoStep('s'+t.dataset.id,t,()=>{remove('suppliers',t.dataset.id);closeSheet();render();toast('Deleted')}),
+ mkLead:t=>{const s=get('suppliers',t.dataset.id),b=t.dataset.biz;if(list('leads').some(l=>l.supplierId===s.id&&l.biz===b)){toast('Already in that pipeline');return}
+   const cat=b==='webburner'?((s.techNeeds||[]).map(n=>NEED_TO_CAT[n]).find(Boolean)||'Custom software'):'Strategic partnerships';
+   save('leads',{id:uid(),biz:b,company:s.company,name:s.contact,category:cat,stage:'Discovered',supplierId:s.id,history:[{ts:Date.now(),txt:'Created from supplier record'}]});toast('Added to '+BIZ[b]+' pipeline');render()},
+ genAI:async t=>{const s=get('suppliers',t.dataset.id),a=assess(s);t.disabled=true;t.textContent='Drafting...';
+   try{const r=await samp(`Write a short, friendly British English follow-up email (under 110 words) from Mihir Patel to a supplier he met at CoCreate London. Use only these facts: ${JSON.stringify({company:s.company,contact:s.contact,country:s.country,category:s.category,challenge:s.challenge,needs:s.techNeeds,notes:s.notes})}. Mihir runs Webburner Tech (software, automation, AI integrations, CRM/ERP, e-commerce, analytics). Do not invent facts, results, clients or prices. End with one clear next step: a 20-minute call. Return only the email.`);$('#fmsg').textContent=r.text;toast('AI draft ready: check before sending')}
+   catch(e){toast(e&&e.code==='not_granted'?'AI drafting was declined':'AI drafting unavailable right now')}t.disabled=false;t.textContent='Draft with AI'},
+ copyEl:t=>copyText($('#'+t.dataset.el).textContent),
+ importSup:()=>sheet('Import CSV',`<p class="mut">Choose the CSV downloaded from your Google Sheet, or paste its contents (header row first). Columns are matched by name.</p><input type="file" id="csvfile" accept=".csv,text/csv"><div class="fld"><label for="csvtext">Or paste CSV</label><textarea id="csvtext" rows="8"></textarea></div><p class="err" id="err" role="alert"></p><button class="btn primary big" data-act="doImport">Import</button>`),
+ doImport:async()=>{let t=$('#csvtext').value;const f=$('#csvfile').files[0];if(f)t=await f.text();const r=importCSV(t);if(r.err){$('#err').textContent=r.err;return}closeSheet();render();toast(r.added+' added, '+r.skipped+' duplicate(s) skipped')},
+ exportSup:()=>saveFile('suppliers-'+todayStr()+'.csv',toCSV(list('suppliers'),SUP.concat([['id','ID'],['updatedAt','Updated (ms)']]))),
+ exportCon:()=>saveFile('contacts-'+todayStr()+'.csv',toCSV(list('contacts'),CON)),
+ loadDemo:()=>{[['DEMO Example Textiles Ltd (not a real company)','Demo Contact','Textiles','Demo Country','Finding customers',['Website','E-commerce'],'None'],['DEMO Sample Packaging Co (not a real company)','Demo Person','Packaging','Demo Country','Logistics/shipping',['AI/automation'],'Exploring'],['DEMO Placeholder Electronics (not a real company)','Demo Name','Consumer electronics','Demo Country','Cash flow/payments',['Payments/finance','Analytics/BI'],'Using in some areas']].forEach(d=>save('suppliers',{id:uid(),demo:true,company:d[0],contact:d[1],category:d[2],country:d[3],challenge:d[4],techNeeds:d[5],ai:d[6],stype:'Manufacturer',status:'New',source:'Other',permission:'Yes',owner:'Mihir',opp:'None yet',interactionDate:todayStr(),notes:'Demo data. Delete before the event.'}));render();toast('Demo records added')},
+ clearDemo:()=>{list('suppliers').filter(s=>s.demo).forEach(s=>remove('suppliers',s.id));render();toast('Demo records cleared')},
+ addCon:()=>conForm(),editCon:t=>conForm(get('contacts',t.dataset.id)),delCon:t=>twoStep('c'+t.dataset.id,t,()=>{remove('contacts',t.dataset.id);closeSheet();render()}),
+ addLead:()=>leadForm(null,ui.biz),editLead:t=>leadForm(get('leads',t.dataset.id)),delLead:t=>twoStep('l'+t.dataset.id,t,()=>{remove('leads',t.dataset.id);closeSheet();render()}),
+ biz:t=>{ui.biz=t.dataset.biz;render()},ntab:t=>{ui.ntab=t.dataset.t;render()},day:t=>{ui.day=t.dataset.d;render()},
+ viewSpk:t=>viewSpk(t.dataset.id),addSess:t=>sessForm(null,t.dataset.type),editSess:t=>sessForm(get('sessions',t.dataset.id)),delSess:t=>twoStep('x'+t.dataset.id,t,()=>{remove('sessions',t.dataset.id);closeSheet();render()}),
+ planCreate:()=>{planTemplate().forEach((p,i)=>save('tasks',{id:'plan-'+i,phase:p[0],due:p[1],title:p[2],done:false,template:true}));render();toast('18 tasks created')},
+ addTask:()=>sheet('Add task',`<form data-form="task"><div class="fld"><label for="tt">Task</label><input id="tt" name="title"></div><div class="fld"><label for="td">Due date</label><input id="td" name="due" type="date" value="${addDays(EVENT_DAYS[1],7)}"></div><p class="err" id="err" role="alert"></p><button class="btn primary big" type="submit">Save task</button></form>`),
+ toggleTask:t=>{const k=get('tasks',t.dataset.id);k.done=t.checked;save('tasks',k);render()},delTask:t=>{remove('tasks',t.dataset.id);render()},
+ editPost:t=>{const p=get('posts',t.dataset.id);sheet('Edit post',`<form data-form="post"><input type="hidden" name="_id" value="${p.id}"><div class="fld"><label for="pt">Text</label><textarea id="pt" name="text" rows="10">${esc(p.text)}</textarea></div>${field(['status','Status','select',['Draft','Scheduled','Posted']],p.status)}<button class="btn primary big" style="margin-top:12px" type="submit">Save</button></form>`)},
+ copyPost:t=>copyText(get('posts',t.dataset.id).text),
+ qrForm:()=>{const s=SET();if(!s.formUrl){sheet('Supplier form QR','<p>No form link yet. Add your real Google Form link under Setup, then this shows a QR code.</p><a class="btn primary" href="#setup" data-act="close">Go to Setup</a>');return}sheet('Supplier form QR','<div id="qrbig" style="display:flex;justify-content:center;padding:16px"></div><p class="mut" style="text-align:center;word-break:break-all">'+esc(s.formUrl)+'</p>');drawQR($('#qrbig'),s.formUrl)},
+ qrContact:()=>{const p=contactPayload();if(!p){sheet('My contact QR','<p>Add your email, phone or LinkedIn under Setup first.</p><a class="btn primary" href="#setup" data-act="close">Go to Setup</a>');return}sheet('My contact QR','<div id="qrbig" style="display:flex;justify-content:center;padding:16px"></div><p class="mut" style="text-align:center">Scanning adds your contact card or opens your link.</p>');drawQR($('#qrbig'),p)},
+ saveQr:t=>{const el=$(t.dataset.t==='form'?'#qr1':'#qr2'),c=$('canvas',el);if(!c){toast('QR not ready');return}c.toBlob(b=>saveFile('qr-'+t.dataset.t+'.png',b,false))},
+ dictate:async()=>{const ta=$('#f_notes');if(!dict||!ta)return;try{dict.onFinal(({text})=>{ta.value=(ta.value?ta.value+' ':'')+text});await dict.start();toast('Listening. Tap Dictate again to stop.')}catch(e){toast('Dictation unavailable')}},
+ repCsv:()=>{const r=reportData();saveFile('supplier-report-'+todayStr()+'.csv',toCSV(r.secs.flatMap(([h,l])=>l.filter(Boolean).map(x=>({s:h,t:x}))),[['s','Section'],['t','Finding']]))},
+ repMd:()=>{const r=reportData();saveFile('supplier-report-'+todayStr()+'.md','# The European Supplier & AI Commerce Report 2026\nBy Webburner Tech\n\n'+r.secs.map(([h,l])=>'## '+h+'\n'+l.filter(Boolean).join('\n\n')).join('\n\n'))},
+ repPdf:async()=>{const r=reportData();if(!window.jspdf){toast('PDF library did not load; use Markdown');return}
+   const {jsPDF}=window.jspdf,d=new jsPDF({unit:'pt',format:'a4'});let y=60;const W=d.internal.pageSize.getWidth()-100,H=d.internal.pageSize.getHeight()-50;
+   const put=(t,sz,b)=>{d.setFont('helvetica',b?'bold':'normal');d.setFontSize(sz);d.splitTextToSize(t,W).forEach(l=>{if(y>H){d.addPage();y=60}d.text(l,50,y);y+=sz*1.4})};
+   put('The European Supplier & AI Commerce Report 2026',18,true);put('By Webburner Tech  |  CoCreate Europe 2026, ExCeL London  |  Generated '+todayStr(),9);y+=10;
+   r.secs.forEach(([h,l])=>{y+=8;put(h,12,true);l.filter(Boolean).forEach(x=>{put(x,10)})});
+   saveFile('supplier-report-'+todayStr()+'.pdf',d.output('arraybuffer'),false)},
+ backup:()=>saveFile('cocreate-backup-'+todayStr()+'.json',JSON.stringify({v:1,when:Date.now(),data:Object.fromEntries(KINDS.map(k=>[k,DB[k]]))},null,1))
+};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t||t.tagName==='INPUT')return;const f=ACT[t.dataset.act];if(f){if(t.tagName==='A'&&t.dataset.act==='close'){closeSheet();return}f(t,e)}});
+document.addEventListener('change',e=>{const t=e.target;
+  if(t.matches('input[data-act=toggleTask]'))ACT.toggleTask(t);
+  else if(t.id==='fstatus'){ui.status=t.value;$('#list').innerHTML=supList()}else if(t.id==='fcat'){ui.cat=t.value;$('#list').innerHTML=supList()}else if(t.id==='fsort'){ui.sort=t.value;$('#list').innerHTML=supList()}
+  else if(t.id==='ntype'){ui.ntype=t.value;$('#clist').innerHTML=conList()}
+  else if(t.id==='photo'&&t.files[0]){downscale(t.files[0]).then(d=>{pendingPhoto=d;$('#photoName').textContent=d?'Photo ready':'Photo could not be read'})}
+  else if(t.id==='rest'&&t.files[0]){t.files[0].text().then(tx=>{try{const j=JSON.parse(tx);KINDS.forEach(k=>(j.data[k]||[]).forEach(r=>{const l=DB[k].find(x=>x.id===r.id);if(!l||(r.updatedAt||0)>(l.updatedAt||0))save(k,r)}));render();toast('Backup restored')}catch(er){toast('That file is not a valid backup')}})}});
+document.addEventListener('input',e=>{const t=e.target;
+  if(t.id==='q'){ui.q=t.value;$('#list').innerHTML=supList()}else if(t.id==='nq'){ui.nq=t.value;$('#clist').innerHTML=conList()}else if(t.id==='gq'){ui.gq=t.value;$('#gres').innerHTML=globalRes()}});
+document.addEventListener('submit',e=>{const f=e.target.closest('form[data-form]');if(!f)return;e.preventDefault();const k=f.dataset.form,err=m=>{const x=$('#err',f);if(x)x.textContent=m};
+  if(k==='sup'){const v=readForm(f,SUP),id=f.elements._id.value;if(!v.company){err('Enter the company name.');return}if(v.email&&!validEmail(v.email)){err('That email address looks incomplete.');return}
+    if(v.website&&!/^https?:\/\//i.test(v.website))v.website='https://'+v.website;const old=get('suppliers',id)||{};
+    save('suppliers',Object.assign({},old,v,{id}));if(pendingPhoto){PHOTOS[id]=pendingPhoto;if(!lsSet('cc26_photos',PHOTOS))toast('Photo too large for device storage')}closeSheet();render();toast('Supplier saved')}
+  else if(k==='con'){const v=readForm(f,CON),id=f.elements._id.value;if(!v.name){err('Enter a name.');return}if(v.email&&!validEmail(v.email)){err('That email address looks incomplete.');return}save('contacts',Object.assign({},get('contacts',id)||{},v,{id}));closeSheet();render();toast('Contact saved')}
+  else if(k==='lead'){const b=f.elements._biz.value,v=readForm(f,LEAD(b)),id=f.elements._id.value;if(!v.company&&!v.name){err('Enter a company or contact.');return}const old=get('leads',id)||{biz:b,history:[]},h=(old.history||[]).slice();
+    if(!old.stage)h.push({ts:Date.now(),txt:'Created at '+v.stage});else if(old.stage!==v.stage)h.push({ts:Date.now(),txt:'Moved from '+old.stage+' to '+v.stage});
+    save('leads',Object.assign({},old,v,{id,biz:b,history:h}));closeSheet();render();toast('Lead saved')}
+  else if(k==='sess'){const t=f.elements._type.value,fields=[['title'],['person'],['day'],['start'],['end'],['stage'],['priority'],['access'],['reminder'],['notes']],v={};const fd=new FormData(f);fields.forEach(x=>{if(fd.has(x[0]))v[x[0]]=String(fd.get(x[0])||'').trim()});
+    if(!v.title){err('Enter a title.');return}if(v.start&&v.end&&v.end<=v.start){err('End time must be after the start time.');return}
+    const id=f.elements._id.value,old=get('sessions',id)||{};save('sessions',Object.assign({},old,v,{id,type:t,priority:Number(v.priority)||3,reminder:v.reminder==='Yes',tbc:old.tbc&&!(v.start&&v.day)?old.tbc:false}));closeSheet();render();
+    const c=conflictsOf(get('sessions',id));toast(c.length?'Saved. Clashes with '+c.map(x=>x.title).join(', '):'Saved')}
+  else if(k==='task'){const fd=new FormData(f),title=String(fd.get('title')||'').trim();if(!title){err('Enter a task.');return}save('tasks',{id:uid(),phase:'Added by me',title,due:fd.get('due')||'',done:false});closeSheet();render()}
+  else if(k==='post'){const fd=new FormData(f),p=get('posts',fd.get('_id'));p.text=String(fd.get('text'));p.status=String(fd.get('status'));save('posts',p);closeSheet();render()}
+  else if(k==='settings'){const fd=new FormData(f),s=Object.assign({},SET());['name','formUrl','email','phone','linkedin','contactUrl'].forEach(x=>s[x]=String(fd.get(x)||'').trim());
+    for(const u of ['formUrl','contactUrl','linkedin'])if(s[u]&&!/^https?:\/\//i.test(s[u])){toast('Links must start with https://');return}
+    save('settings',s);render();toast('Saved')}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sheet').hidden)closeSheet()});
+
+/* ---------- start ---------- */
+ensureSeeds();
+route();
+setSync('Saved on this device','');
+connect();
+</script>
+
+</body></html>
