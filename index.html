@@ -242,6 +242,7 @@ const SEED_DIRECTORY=[["Apparel & Accessories","Engineering high-complexity stre
 function ensureSeeds(){
   SEED_DIRECTORY.forEach((s,i)=>{const id='dir-supplier-'+String(i+1).padStart(2,'0');if(!DB.suppliers.find(r=>r.id===id))DB.suppliers.push({id,company:s[1],category:s[0],desc:s[1],status:'New',source:'Supplier directory PDF',stype:'Other',priority:s[2],businessAngle:s[3],notes:'Directory entry from CoCreate Europe Suppliers.pdf, page '+(i<12?1:i<27?2:i<42?3:4)+'. Legal company name, contact details, location, website, booth and credentials are not supplied in the PDF. Verify at stand before qualification.',permission:'Unknown',opp:'Webburner',updatedAt:1})});
 
+  persist('suppliers');
   SEED_SESS.forEach((s,i)=>{const id='seed-sess-'+i;if(!DB.sessions.find(r=>r.id===id))DB.sessions.push({id,type:'session',title:s[0],priority:s[1],notes:s[2],day:'',start:'',end:'',stage:'',access:'Check ticket',tbc:true,updatedAt:1})});
   SEED_POSTS.forEach((p,i)=>{const id='seed-post-'+i;if(!DB.posts.find(r=>r.id===id))DB.posts.push({id,title:p[0],channel:p[1],text:p[2],status:'Draft',updatedAt:1})});
   persist('sessions');persist('posts');
